@@ -15,5 +15,5 @@ echo "Cloning extra zsh plugins..."
 git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zdharma/fast-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
 echo "Changing shell to zsh..."
-chsh -s $(which zsh)
+sudo chsh -s $(which zsh)
 
