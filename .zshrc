@@ -36,13 +36,18 @@ export EDITOR=vim
 eval `keychain --quiet --eval --agents ssh id_rsa`
 
 # Node.js (uses tj/n)
-export N_PREFIX="$HOME/.n"
-export PATH="$N_PREFIX/bin:$PATH"
+if (( $+commands[n] )) then
+	export N_PREFIX="$HOME/.n"
+	export PATH="$N_PREFIX/bin:$PATH"
+fi
 
 # Rust (uses rustup)
-source $HOME/.cargo/env
+if [[ -d ~/.cargo ]] then
+	source ~/.cargo/env
+fi
 
 # Golang
-export GOROOT=/home/maple3142/.go
-export PATH=$GOROOT/bin:$PATH
-
+if [[ -d ~/.go ]] then
+	export GOROOT="$HOME/.go"
+	export PATH="$GOROOT/bin:$PATH"
+fi
