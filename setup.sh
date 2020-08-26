@@ -2,10 +2,9 @@
 WHITE='\033[1;37m'
 LGREEN='\033[1;32m'
 CYAN='\033[0;36m'
-LOG_PREFIX="${LGREEN}Setup: ${WHITE}"
+LOG_PREFIX="Setup:"
 log(){
-	msg="${LOG_PREFIX}${CYAN}$1${WHITE}\n"
-	printf "%s" "$msg"
+	printf "%b%s%b %b%s%b\n" "$LGREEN" "$LOG_PREFIX" "$WHITE" "$CYAN" "$1" "$WHITE"
 }
 cd ~ || { echo "Unable to cd ~"; exit 1; }
 log "Removing .oh-my-zsh .temphome..."
