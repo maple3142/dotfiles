@@ -5,9 +5,11 @@ export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 if [[ $(uname -a) =~ "microsoft" ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
 	# Copy .ssh
-	rm -rf ~/.ssh
-	/bin/cp -rf /mnt/c/Users/maple3142/.ssh ~/.ssh
-	chmod 600 ~/.ssh/*
+	upd_ssh(){
+		rm -rf ~/.ssh
+		/bin/cp -rf /mnt/c/Users/maple3142/.ssh ~/.ssh
+		chmod 600 ~/.ssh/*
+	}
 fi
 
 # Zsh settings
