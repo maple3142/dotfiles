@@ -21,9 +21,8 @@ log "Installing oh my zsh..."
 curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
 log "Cloning dotfiles to .temphome..."
 git clone https://github.com/maple3142/dotfiles.git .temphome
-rm -rf .temphome/.git .temphome/setup.sh
 log "Copying dotfiles to home..."
-cp -a -rf -- .temphome/. .
+cp -a -rf -- .temphome/{.zshrc,.vimrc,.prettierrc} .
 log "Removing .temphome..."
 rm -rf .temphome
 log "Cloning extra zsh plugins..."
