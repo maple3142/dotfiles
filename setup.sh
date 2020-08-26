@@ -2,11 +2,12 @@
 WHITE='\033[1;37m'
 LGREEN='\033[1;32m'
 CYAN='\033[0;36m'
-LOG_PREFIX="${LGREEN}Setup: ${WHILE}"
+LOG_PREFIX="${LGREEN}Setup: ${WHITE}"
 log(){
-        printf "${LOG_PREFIX}${CYAN}$1${WHITE}\n"
+	msg="${LOG_PREFIX}${CYAN}$1${WHITE}\n"
+	printf "%s" "$msg"
 }
-cd ~
+cd ~ || { echo "Unable to cd ~"; exit 1; }
 log "Removing .oh-my-zsh .temphome..."
 rm -rf .oh-my-zsh .temphome
 log "Installing oh my zsh..."
@@ -19,8 +20,8 @@ cp -a -rf -- .temphome/. .
 log "Removing .temphome..."
 rm -rf .temphome
 log "Cloning extra zsh plugins..."
-git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zdharma/fast-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions.git .oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zdharma/fast-syntax-highlighting.git .oh-my-zsh/custom/plugins/fast-syntax-highlighting
 log "Changing shell to zsh..."
-sudo chsh -s $(which zsh)
+sudo chsh -s "$(which zsh)"
 
