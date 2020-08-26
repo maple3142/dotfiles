@@ -35,7 +35,9 @@ export LANG=en_US.UTF-8
 export EDITOR=vim
 
 # Keychain
-eval `keychain --quiet --eval --agents ssh id_rsa`
+if (( $+commands[keychain] )) then
+	eval `keychain --quiet --eval --agents ssh id_rsa`
+fi
 
 # Node.js (uses tj/n)
 if (( $+commands[n] )) then
