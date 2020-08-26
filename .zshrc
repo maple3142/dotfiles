@@ -55,3 +55,8 @@ if [[ -d ~/.go ]] then
 	export GOROOT="$HOME/.go"
 	export PATH="$GOROOT/bin:$PATH"
 fi
+
+# Aliases
+alias ga="git add -A"
+alias gc="git commit -m"
+alias gp="git push"
