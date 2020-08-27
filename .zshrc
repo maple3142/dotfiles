@@ -58,5 +58,5 @@ fi
 
 # Aliases
 alias ga="git add -A"
-alias gc="git commit -m"
+alias gcm="git commit -m"
 alias gp="git push"
