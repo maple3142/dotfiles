@@ -3,6 +3,7 @@ export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 
 # WSL specific
 if [[ $(uname -a) =~ "microsoft" ]] then
+	export PATH="$(/usr/bin/printenv PATH | /usr/bin/perl -ne 'print join(":", grep { !/\/mnt\/[a-z]/ } split(/:/));')" # Remove Windows paths
 	alias ex=/mnt/c/Windows/explorer.exe
 	# Copy .ssh
 	upd_ssh(){
@@ -45,7 +46,7 @@ if (( $+commands[n] )) then
 	export PATH="$N_PREFIX/bin:$PATH"
 fi
 if (( $+commands[yarn] )) then
-	export PATH="$(yarn global bin):$PATH"
+	export PATH="$HOME/.yarn/bin:$PATH"
 fi
 
 # Rust (uses rustup)
