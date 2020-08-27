@@ -3,7 +3,6 @@ export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 
 # WSL specific
 if [[ $(uname -a) =~ "microsoft" ]] then
-	export PATH="$(/usr/bin/printenv PATH | /usr/bin/perl -ne 'print join(":", grep { !/\/mnt\/[a-z]/ } split(/:/));')" # Remove Windows paths
 	alias ex=/mnt/c/Windows/explorer.exe
 	# Copy .ssh
 	upd_ssh(){
