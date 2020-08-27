@@ -44,6 +44,9 @@ if (( $+commands[n] )) then
 	export N_PREFIX="$HOME/.n"
 	export PATH="$N_PREFIX/bin:$PATH"
 fi
+if (( $+commands[yarn] )) then
+	export PATH="$(yarn global bin):$PATH"
+fi
 
 # Rust (uses rustup)
 if [[ -d ~/.cargo ]] then
