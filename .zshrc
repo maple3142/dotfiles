@@ -56,6 +56,11 @@ if [[ -d ~/.go ]] then
 	export PATH="$GOROOT/bin:$PATH"
 fi
 
+# CHROME_PATH
+if (( $+commands[chromium] )) then
+	export CHROME_PATH="$(which chromium)"
+fi
+
 # Aliases
 alias ga="git add -A"
 alias gcm="git commit -m"
