@@ -48,6 +48,11 @@ if (( $+commands[yarn] )) then
 	export PATH="$HOME/.yarn/bin:$PATH"
 fi
 
+# Python (Poetry)
+if [[ -d ~/.poetry ]] then
+	export PATH="$HOME/.poetry/bin:$PATH"
+fi
+
 # Rust (uses rustup)
 if [[ -d ~/.cargo ]] then
 	source ~/.cargo/env
