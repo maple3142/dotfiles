@@ -34,6 +34,9 @@ export LANG=en_US.UTF-8
 # Editor
 export EDITOR=vim
 
+# Less
+export LESS="-R --mouse"
+
 # Keychain
 if (( $+commands[keychain] )) then
 	eval `keychain --quiet --eval --agents ssh id_rsa`
