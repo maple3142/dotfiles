@@ -38,16 +38,16 @@ export EDITOR=vim
 export LESS="-R --mouse"
 
 # Keychain
-if (( $+commands[keychain] )) then
+if [[ $+commands[keychain] && -a ~/.ssh/id_rsa ]] then
 	eval `keychain --quiet --eval --agents ssh id_rsa`
 fi
 
 # Node.js (uses tj/n)
-if (( $+commands[n] )) then
+if [[ $+commands[n] ]] then
 	export N_PREFIX="$HOME/.n"
 	export PATH="$N_PREFIX/bin:$PATH"
 fi
-if (( $+commands[yarn] )) then
+if [[ $+commands[yarn] ]] then
 	export PATH="$HOME/.yarn/bin:$PATH"
 fi
 
@@ -68,7 +68,7 @@ if [[ -d ~/.go ]] then
 fi
 
 # CHROME_PATH
-if (( $+commands[chromium] )) then
+if [[ $+commands[chromium] ]] then
 	export CHROME_PATH="$(which chromium)"
 fi
 
