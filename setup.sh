@@ -29,5 +29,6 @@ log "Cloning extra zsh plugins..."
 git clone https://github.com/zsh-users/zsh-autosuggestions.git .oh-my-zsh/custom/plugins/zsh-autosuggestions
 git clone https://github.com/zdharma/fast-syntax-highlighting.git .oh-my-zsh/custom/plugins/fast-syntax-highlighting
 log "Changing shell to zsh..."
-sudo chsh -s "$(which zsh)"
+chsh -s "$(which zsh)"
 log "All done! Restart your terminal or enter \`zsh\` to enjoy!"
+log "If it doesn't work, use chsh to manually change shell."
