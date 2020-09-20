@@ -1,6 +1,7 @@
 *
 !.gitignore
 !.zshrc
+!.p10k.zsh
 !.vimrc
 !.prettierrc
 !.tmux.conf

@@ -1,3 +1,31 @@
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+source ~/.zinit/bin/zinit.zsh
+
+setopt promptsubst
+
+zinit snippet OMZL::history.zsh
+zinit wait lucid for \
+  OMZL::theme-and-appearance.zsh \
+  OMZL::key-bindings.zsh \
+  OMZP::sudo
+
+zinit wait lucid light-mode for \
+  atinit"zicompinit; zicdreplay" \
+      zdharma/fast-syntax-highlighting \
+  atload"_zsh_autosuggest_start" \
+      zsh-users/zsh-autosuggestions \
+  blockf atpull'zinit creinstall -q .' \
+      zsh-users/zsh-completions
+
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
+
+zinit wait lucid for \
+  as="program" pick"bin/n" tj/n
+
 # Path
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 
@@ -15,18 +43,6 @@ fi
 # Zsh settings
 ZSH_DISABLE_COMPFIX="true"
 HIST_STAMPS="yyyy-mm-dd"
-
-# Oh my zsh
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="ys"
-plugins=(
-	docker # docker autocomplete
-	sudo # press ESC two times to prepend `sudo`
-	zsh-autosuggestions # suggest command from history
-	fast-syntax-highlighting # zsh syntax highlighting
-	zsh_reload # `src` to reload and recompile .zshrc
-)
-source $ZSH/oh-my-zsh.sh
 
 # Lang
 export LANG=en_US.UTF-8
@@ -76,3 +92,6 @@ fi
 alias ga="git add -A"
 alias gcm="git commit -m"
 alias gp="git push"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
