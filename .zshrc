@@ -32,8 +32,14 @@ zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
 zinit wait lucid for \
-  as="program" pick"bin/n" tj/n
+  as"program" pick"bin/n" tj/n
 
+zinit wait lucid from"gh-r" as"program" for \
+  pick"jq-*" mv"jq-* -> jq" stedolan/jq \
+  pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
+  pick"exa-linux-*" extract mv"exa-* -> exa" ogham/exa \
+  pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat
+  
 # Path
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 
@@ -95,6 +101,12 @@ fi
 alias ga="git add -A"
 alias gcm="git commit -m"
 alias gp="git push"
+if [[ $+commands[exa] ]] then
+	alias ls=exa
+fi
+if [[ $+commands[bat] ]] then
+	alias cat=bat
+fi
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
