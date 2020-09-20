@@ -13,6 +13,7 @@ zinit wait lucid for \
   OMZP::sudo
 
 zinit wait lucid light-mode for \
+  zsh-users/zsh-history-substring-search \
   atinit"zicompinit; zicdreplay" \
       zdharma/fast-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
