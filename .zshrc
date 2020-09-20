@@ -1,7 +1,14 @@
+# Keychain
+if [[ $+commands[keychain] && -a ~/.ssh/id_rsa ]] then
+	eval `keychain --quiet --eval --agents ssh id_rsa`
+fi
+
+# Powerlevel10k Instant Prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# ZInit
 source ~/.zinit/bin/zinit.zsh
 
 setopt promptsubst
@@ -53,11 +60,6 @@ export EDITOR=vim
 
 # Less
 export LESS="-R --mouse"
-
-# Keychain
-if [[ $+commands[keychain] && -a ~/.ssh/id_rsa ]] then
-	eval `keychain --quiet --eval --agents ssh id_rsa`
-fi
 
 # Node.js (uses tj/n)
 if [[ $+commands[n] ]] then
