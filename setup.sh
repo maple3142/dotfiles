@@ -23,7 +23,7 @@ log "Removing .temphome..."
 rm -rf .temphome
 log "Installing zinit..."
 mkdir .zinit
-git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
+git clone https://github.com/zdharma/zinit.git ~/.zinit/bin --depth=1
 log "Changing shell to zsh..."
 chsh -s "$(which zsh)"
 log "All done! Restart your terminal or enter \`zsh\` to enjoy!"
