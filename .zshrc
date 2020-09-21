@@ -1,5 +1,5 @@
 # Keychain
-if [[ $+commands[keychain] && -a ~/.ssh/id_rsa ]] then
+if (( $+commands[keychain] )) && [[ -a ~/.ssh/id_rsa ]] then
 	eval `keychain --quiet --eval --agents ssh id_rsa`
 fi
 
@@ -44,7 +44,7 @@ zinit wait lucid from"gh-r" as"program" for \
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 
 # WSL specific
-if [[ $(uname -a) =~ "microsoft" ]] then
+if [[ $(uname -a) =~ "Microsoft" ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
 	# Copy .ssh
 	upd_ssh(){
@@ -68,11 +68,11 @@ export EDITOR=vim
 export LESS="-R --mouse"
 
 # Node.js (uses tj/n)
-if [[ $+commands[n] ]] then
+if (( $+commands[n] )) then
 	export N_PREFIX="$HOME/.n"
 	export PATH="$N_PREFIX/bin:$PATH"
 fi
-if [[ $+commands[yarn] ]] then
+if (( $+commands[yarn] )) then
 	export PATH="$HOME/.yarn/bin:$PATH"
 fi
 
@@ -93,7 +93,7 @@ if [[ -d ~/.go ]] then
 fi
 
 # CHROME_PATH
-if [[ $+commands[chromium] ]] then
+if (( $+commands[chromium] )) then
 	export CHROME_PATH="$(which chromium)"
 fi
 
@@ -101,12 +101,13 @@ fi
 alias ga="git add -A"
 alias gcm="git commit -m"
 alias gp="git push"
-if [[ $+commands[exa] ]] then
+if (( $+commands[exa] )) then
 	alias ls=exa
 fi
-if [[ $+commands[bat] ]] then
+if (( $+commands[bat] )) then
 	alias cat=bat
 fi
 
 # P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
