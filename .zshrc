@@ -44,7 +44,8 @@ zinit wait lucid from"gh-r" as"program" for \
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 
 # WSL specific
-if [[ $(uname -a) =~ "Microsoft" ]] then
+uname="$(uname -a)"
+if [[ ${uname:l} =~ "microsoft" ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
 	# Copy .ssh
 	upd_ssh(){
