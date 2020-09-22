@@ -47,10 +47,11 @@ export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 uname="$(uname -a)"
 if [[ ${uname:l} =~ "microsoft" ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
+	alias clip=/mnt/c/Windows/System32/clip.exe
 	# Copy .ssh
 	upd_ssh(){
 		rm -rf ~/.ssh
-		/bin/cp -rf /mnt/c/Users/maple3142/.ssh ~/.ssh
+		/bin/cp -rf "/mnt/c/Users/$(whoami)/.ssh" ~/.ssh
 		chmod 600 ~/.ssh/*
 	}
 fi
