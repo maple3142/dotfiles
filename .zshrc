@@ -11,11 +11,8 @@ fi
 # ZInit
 source ~/.zinit/bin/zinit.zsh
 
-setopt promptsubst
-
 zinit snippet OMZL::history.zsh
 zinit wait lucid for \
-  OMZL::theme-and-appearance.zsh \
   OMZL::key-bindings.zsh \
   OMZP::sudo
 
@@ -25,16 +22,16 @@ zinit wait lucid light-mode for \
       zdharma/fast-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
       zsh-users/zsh-autosuggestions \
-  blockf atpull'zinit creinstall -q .' \
+  blockf atpull"zinit creinstall -q ." \
       zsh-users/zsh-completions
 
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
-zinit wait lucid for \
+zinit lucid for \
   as"program" pick"bin/n" tj/n
 
-zinit wait lucid from"gh-r" as"program" for \
+zinit lucid from"gh-r" as"program" for \
   pick"jq-*" mv"jq-* -> jq" stedolan/jq \
   pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
   pick"exa-linux-*" extract mv"exa-* -> exa" ogham/exa \
@@ -103,11 +100,14 @@ fi
 alias ga="git add -A"
 alias gcm="git commit -m"
 alias gp="git push"
+
 if (( $+commands[exa] )) then
-	alias ls=exa
+	alias ls="exa"
+	alias ll="exa -l"
+	alias la="exa -la"
 fi
 if (( $+commands[bat] )) then
-	alias cat=bat
+	alias cat="bat -p"
 fi
 
 # P10k Initialize
