@@ -56,6 +56,18 @@ fi
 # Zsh settings
 ZSH_DISABLE_COMPFIX="true"
 HIST_STAMPS="yyyy-mm-dd"
+zstyle ':completion:*' menu select
+
+# Fix ssh autocomplete
+zstyle ':completion:*:ssh:argument-1:*' tag-order hosts
+h=()
+if [[ -r ~/.ssh/config ]]; then
+  h=($h ${${${(@M)${(f)"$(cat ~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
+fi
+if [[ $#h -gt 0 ]]; then
+  zstyle ':completion:*:ssh:*' hosts $h
+  zstyle ':completion:*:slogin:*' hosts $h
+fi
 
 # Lang
 export LANG=en_US.UTF-8
