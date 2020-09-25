@@ -14,6 +14,7 @@ require(){
 }
 require zsh || exit $?
 require git || exit $?
+require unzip || exit $?
 cd ~ || { echo "Unable to cd ~"; exit 1; }
 log "Cloning dotfiles to .temphome..."
 git clone https://github.com/maple3142/dotfiles.git .temphome
