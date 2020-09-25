@@ -41,10 +41,8 @@ zinit lucid from"gh-r" as"program" for \
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 
 # WSL specific
-uname="$(uname -a)"
-if [[ ${uname:l} =~ "microsoft" ]] then
+if [[ -v $WSL_DISTRO_NAME ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
-	alias clip=/mnt/c/Windows/System32/clip.exe
 	# Copy .ssh
 	upd_ssh(){
 		rm -rf ~/.ssh
