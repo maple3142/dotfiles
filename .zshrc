@@ -77,9 +77,6 @@ export LANG=en_US.UTF-8
 # Editor
 export EDITOR=vim
 
-# Less
-export LESS="-R --mouse"
-
 # Node.js (uses tj/n)
 if (( $+commands[n] )) then
 	export N_PREFIX="$HOME/.n"
