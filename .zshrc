@@ -41,7 +41,7 @@ zinit lucid from"gh-r" as"program" for \
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 
 # WSL specific
-if [[ -v $WSL_DISTRO_NAME ]] then
+if [[ -v WSL_DISTRO_NAME ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
 	# Copy .ssh
 	upd_ssh(){
