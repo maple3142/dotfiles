@@ -8,6 +8,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Zsh settings
+ZSH_DISABLE_COMPFIX="true"
+HIST_STAMPS="yyyy-mm-dd"
+zstyle ':completion:*' menu select
+
 # ZInit
 source ~/.zinit/bin/zinit.zsh
 
@@ -54,11 +59,6 @@ if [[ -v WSL_DISTRO_NAME ]] then
 	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
 	zinit wait'3' lucid atinit'export PATH="$PATH:$WIN_PATH"' nocd for /dev/null
 fi
-
-# Zsh settings
-ZSH_DISABLE_COMPFIX="true"
-HIST_STAMPS="yyyy-mm-dd"
-zstyle ':completion:*' menu select
 
 # Fix ssh autocomplete
 zstyle ':completion:*:ssh:argument-1:*' tag-order hosts
