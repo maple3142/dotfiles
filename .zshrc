@@ -101,6 +101,10 @@ if [[ -d ~/.go ]] then
 	export GOROOT="$HOME/.go"
 	export PATH="$GOROOT/bin:$PATH"
 fi
+# Miniconda3
+if [[ -d ~/miniconda3 ]] then
+	source ~/miniconda3/bin/activate
+fi
 
 # CHROME_PATH
 if (( $+commands[chromium] )) then
