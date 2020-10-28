@@ -104,7 +104,7 @@ if [[ -d ~/.go ]] then
 fi
 # Miniconda3
 if [[ -d ~/miniconda3 ]] then
-	source ~/miniconda3/bin/activate
+	source ~/miniconda3/etc/profile.d/conda.sh
 fi
 
 # CHROME_PATH
