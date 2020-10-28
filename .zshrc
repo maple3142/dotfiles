@@ -26,9 +26,10 @@ zinit wait lucid light-mode for \
   atinit"zicompinit; zicdreplay" \
       zdharma/fast-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
-      zsh-users/zsh-autosuggestions \
-  blockf atpull"zinit creinstall -q ." \
-      zsh-users/zsh-completions
+      zsh-users/zsh-autosuggestions
+zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
+  zsh-users/zsh-completions \
+  esc/conda-zsh-completion
 
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
