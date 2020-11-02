@@ -12,6 +12,7 @@ fi
 ZSH_DISABLE_COMPFIX="true"
 HIST_STAMPS="yyyy-mm-dd"
 zstyle ':completion:*' menu select
+setopt autocd
 
 # ZInit
 source ~/.zinit/bin/zinit.zsh
