@@ -1,6 +1,12 @@
 # Keychain
-if (( $+commands[keychain] )) && [[ -a ~/.ssh/id_rsa ]] then
-	eval `keychain --quiet --eval --agents ssh id_rsa`
+if (( $+commands[keychain] )) then
+	if [[ -a ~/.ssh/id_ed25519 ]] then
+		eval `keychain --quiet --eval --agents ssh id_ed25519`
+	fi
+	if [[ -a ~/.ssh/id_rsa ]] then
+		eval `keychain --quiet --eval --agents ssh id_rsa`
+	fi
+
 fi
 
 # Powerlevel10k Instant Prompt
