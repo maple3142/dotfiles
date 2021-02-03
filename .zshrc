@@ -47,6 +47,9 @@ zinit lucid from"gh-r" as"program" for \
 # Path
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 
+# GPG TTY
+export GPG_TTY=$(tty)
+
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
