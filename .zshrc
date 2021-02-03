@@ -1,3 +1,6 @@
+# GPG TTY
+export GPG_TTY=$(tty)
+
 # Keychain
 if (( $+commands[keychain] )) then
 	if [[ -a ~/.ssh/id_ed25519 ]] then
@@ -52,9 +55,6 @@ zinit lucid from"gh-r" as"program" for \
   
 # Path
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
-
-# GPG TTY
-export GPG_TTY=$(tty)
 
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]] then
