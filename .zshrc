@@ -44,14 +44,14 @@ zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
-zinit lucid for \
-  as"program" pick"bin/n" tj/n
-
 zinit lucid from"gh-r" as"program" for \
   pick"jq-*" mv"jq-* -> jq" stedolan/jq \
   pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
   pick"exa-linux-*" extract mv"exa-* -> exa" ogham/exa \
   pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat
+
+zinit ice wait'!0'
+zinit load asdf-vm/asdf
   
 # Path
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
@@ -88,15 +88,6 @@ export LANG=en_US.UTF-8
 
 # Editor
 export EDITOR=vim
-
-# Node.js (uses tj/n)
-if (( $+commands[n] )) then
-	export N_PREFIX="$HOME/.n"
-	export PATH="$N_PREFIX/bin:$PATH"
-fi
-if (( $+commands[yarn] )) then
-	export PATH="$HOME/.yarn/bin:$PATH"
-fi
 
 # Python (Poetry)
 if [[ -d ~/.poetry ]] then
