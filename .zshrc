@@ -9,7 +9,9 @@ if (( $+commands[keychain] )) then
 	if [[ -a ~/.ssh/id_rsa ]] then
 		eval `keychain --quiet --eval --agents ssh id_rsa`
 	fi
-
+	if (( $+commands[gpg] )) then
+		eval `keychain --quiet --eval --agents gpg 995BE4B4FA87FBDF2918B79A756CCE11F43A09FF`
+	fi
 fi
 
 # Powerlevel10k Instant Prompt
