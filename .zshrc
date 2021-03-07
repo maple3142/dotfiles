@@ -24,6 +24,7 @@ ZSH_DISABLE_COMPFIX="true"
 HIST_STAMPS="yyyy-mm-dd"
 zstyle ':completion:*' menu select
 setopt autocd
+unsetopt beep
 
 # ZInit
 source ~/.zinit/bin/zinit.zsh
