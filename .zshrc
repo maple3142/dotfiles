@@ -22,7 +22,7 @@ fi
 # Zsh settings
 ZSH_DISABLE_COMPFIX="true"
 HIST_STAMPS="yyyy-mm-dd"
-zstyle ':completion:*' menu select
+zstyle ":completion:*" menu select
 setopt autocd
 unsetopt beep
 
@@ -53,7 +53,7 @@ zinit lucid from"gh-r" as"program" for \
   pick"exa-linux-*" extract mv"exa-* -> exa" ogham/exa \
   pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat
 
-zinit ice wait'!0'
+zinit ice wait"!0"
 zinit load asdf-vm/asdf
 
 zinit ice wait"2" as"program" pick"tldr" lucid
@@ -65,7 +65,7 @@ export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
-	export DISPLAY=$(route -n | grep UG | head -n1 | awk '{print $2}'):0
+	export DISPLAY=$(route -n | grep UG | head -n1 | awk "{print $2}"):0
 	# Copy .ssh
 	upd_ssh(){
 		rm -rf ~/.ssh
@@ -73,20 +73,20 @@ if [[ -v WSL_DISTRO_NAME ]] then
 		chmod 600 ~/.ssh/*
 	}
 	# Windows Path handling for performance
-	WIN_PATH=$(echo $PATH | tr ':' '\n' | grep '/mnt/c' | tr '\n' ':' | sed 's/.$//')
-	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
-	zinit wait'3' lucid atinit'export PATH="$PATH:$WIN_PATH"' nocd for /dev/null
+	WIN_PATH=$(echo $PATH | tr ":" "\n" | grep "/mnt/c" | tr "\n" ":" | sed "s/.$//")
+	export PATH=$(echo $PATH | tr ":" "\n" | grep -v "/mnt/c" | tr "\n" ":" | sed "s/.$//")
+	zinit wait"3" lucid atinit"export PATH="$PATH:$WIN_PATH"" nocd for /dev/null
 fi
 
 # Fix ssh autocomplete
-zstyle ':completion:*:ssh:argument-1:*' tag-order hosts
+zstyle ":completion:*:ssh:argument-1:*" tag-order hosts
 h=()
 if [[ -r ~/.ssh/config ]]; then
   h=($h ${${${(@M)${(f)"$(cat ~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
 fi
 if [[ $#h -gt 0 ]]; then
-  zstyle ':completion:*:ssh:*' hosts $h
-  zstyle ':completion:*:slogin:*' hosts $h
+  zstyle ":completion:*:ssh:*" hosts $h
+  zstyle ":completion:*:slogin:*" hosts $h
 fi
 
 # Lang
