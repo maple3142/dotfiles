@@ -55,6 +55,9 @@ zinit lucid from"gh-r" as"program" for \
 
 zinit ice wait'!0'
 zinit load asdf-vm/asdf
+
+zinit ice wait"2" as"program" pick"tldr" lucid
+zinit light raylee/tldr-sh-client
   
 # Path
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
