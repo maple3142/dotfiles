@@ -25,6 +25,7 @@ HIST_STAMPS="yyyy-mm-dd"
 zstyle ":completion:*" menu select
 setopt autocd
 unsetopt beep
+unsetopt nomatch
 
 # ZInit
 source ~/.zinit/bin/zinit.zsh
@@ -56,7 +57,7 @@ zinit lucid from"gh-r" as"program" for \
 zinit ice wait"!0"
 zinit load asdf-vm/asdf
 
-zinit ice wait"2" as"program" pick"tldr" lucid
+zinit ice wait"0" as"program" pick"tldr" lucid
 zinit light raylee/tldr-sh-client
   
 # Path
