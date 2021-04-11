@@ -51,7 +51,7 @@ zinit lucid from"gh-r" as"program" for \
   pick"exa-linux-*" extract mv"exa-* -> exa" ogham/exa \
   pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat
 
-zinit ice wait"!0"
+zinit ice wait"!0" lucid
 zinit load asdf-vm/asdf
   
 # Path
