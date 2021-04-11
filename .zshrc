@@ -56,12 +56,9 @@ zinit lucid from"gh-r" as"program" for \
 
 zinit ice wait"!0"
 zinit load asdf-vm/asdf
-
-zinit ice wait"0" as"program" pick"tldr" lucid
-zinit light raylee/tldr-sh-client
   
 # Path
-export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.local/bin:/usr/local/bin:"$PATH"
 
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]] then
@@ -73,10 +70,6 @@ if [[ -v WSL_DISTRO_NAME ]] then
 		/bin/cp -rf "/mnt/c/Users/$(whoami)/.ssh" ~/.ssh
 		chmod 600 ~/.ssh/*
 	}
-	# Windows Path handling for performance
-	WIN_PATH=$(echo $PATH | tr ":" "\n" | grep "/mnt/c" | tr "\n" ":" | sed "s/.$//")
-	export PATH=$(echo $PATH | tr ":" "\n" | grep -v "/mnt/c" | tr "\n" ":" | sed "s/.$//")
-	zinit wait"3" lucid atinit"export PATH="$PATH:$WIN_PATH"" nocd for /dev/null
 fi
 
 # Fix ssh autocomplete
