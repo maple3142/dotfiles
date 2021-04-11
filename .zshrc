@@ -60,7 +60,7 @@ export PATH=$HOME/.local/bin:/usr/local/bin:"$PATH"
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
-	export DISPLAY=$(route -n | grep UG | head -n1 | awk "{print $2}"):0
+	export DISPLAY=$(route -n | grep UG | head -n1 | awk '{print $2}'):0
 	# Copy .ssh
 	upd_ssh(){
 		rm -rf ~/.ssh
