@@ -48,7 +48,7 @@ zinit light romkatv/powerlevel10k
 zinit lucid from"gh-r" as"program" for \
   pick"jq-*" mv"jq-* -> jq" stedolan/jq \
   pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
-  pick"exa-linux-*" extract mv"exa-* -> exa" ogham/exa \
+  pick"exa-linux-*" extract mv"bin/exa -> exa" ogham/exa \
   pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat
 
 zinit ice wait"!0" lucid
