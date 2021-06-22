@@ -48,8 +48,9 @@ zinit light romkatv/powerlevel10k
 zinit lucid from"gh-r" as"program" for \
   pick"jq-*" mv"jq-* -> jq" stedolan/jq \
   pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
-  pick"exa-linux-*" extract mv"bin/exa -> exa" ogham/exa \
-  pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat
+  pick"exa-linux-*" extract mv"*/exa -> exa" ogham/exa \
+  pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat \
+  pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd
 
 zinit ice wait"!0" lucid
 zinit load asdf-vm/asdf
@@ -115,6 +116,8 @@ fi
 alias ga="git add -A"
 alias gcm="git commit -m"
 alias gp="git push"
+alias rg="rg --no-ignore-parent -M 200"
+alias fd="fd --no-ignore"
 
 if (( $+commands[exa] )) then
 	alias ls="exa"
