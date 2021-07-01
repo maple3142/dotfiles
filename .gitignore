@@ -1,5 +1,6 @@
 *
 !.gitignore
+!.fdignore
 !.zshrc
 !.p10k.zsh
 !.vimrc
