@@ -50,7 +50,8 @@ zinit lucid from"gh-r" as"program" for \
   pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
   pick"exa-linux-*" extract mv"*/exa -> exa" ogham/exa \
   pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat \
-  pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd
+  pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd \
+  pick"fzf-*amd64-*" extract mv"*/fzf -> fzf" @junegunn/fzf
 
 zinit ice wait"!0" lucid
 zinit load asdf-vm/asdf
@@ -87,6 +88,9 @@ export LANG=en_US.UTF-8
 # Editor
 export EDITOR=vim
 
+# fzf
+export FZF_DEFAULT_COMMAND='fd --no-ignore-vcs'
+
 # Python (Poetry)
 if [[ -d ~/.poetry ]] then
 	export PATH="$HOME/.poetry/bin:$PATH"
@@ -117,7 +121,7 @@ alias ga="git add -A"
 alias gcm="git commit -m"
 alias gp="git push"
 alias rg="rg --no-ignore-parent -M 200"
-alias fd="fd --no-ignore"
+alias fd="fd --no-ignore-vcs"
 
 if (( $+commands[exa] )) then
 	alias ls="exa"
