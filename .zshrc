@@ -89,7 +89,7 @@ export LANG=en_US.UTF-8
 export EDITOR=vim
 
 # fzf
-export FZF_DEFAULT_COMMAND='fd --no-ignore-vcs'
+export FZF_DEFAULT_COMMAND='fd'
 
 # Python (Poetry)
 if [[ -d ~/.poetry ]] then
@@ -121,7 +121,7 @@ alias ga="git add -A"
 alias gcm="git commit -m"
 alias gp="git push"
 alias rg="rg --no-ignore-parent -M 200"
-alias fd="fd --no-ignore-vcs"
+alias fd="fd"
 
 if (( $+commands[exa] )) then
 	alias ls="exa"
