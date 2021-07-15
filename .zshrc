@@ -16,6 +16,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Set title
+echo -ne "\033]0;$USER@$HOST\007"
+
 # Zsh settings
 ZSH_DISABLE_COMPFIX="true"
 HIST_STAMPS="yyyy-mm-dd"
@@ -131,6 +134,11 @@ fi
 if (( $+commands[bat] )) then
 	alias cat="bat -p"
 fi
+
+ssh(){
+	/usr/bin/ssh "$@"
+	echo -ne "\033]0;$USER@$HOST\007"
+}
 
 # P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
