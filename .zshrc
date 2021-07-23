@@ -56,6 +56,11 @@ zinit lucid from"gh-r" as"program" for \
   pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd \
   pick"fzf-*amd64-*" extract mv"*/fzf -> fzf" @junegunn/fzf
 
+zinit ice lucid wait'0c' multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
+zinit light junegunn/fzf
+
+zinit light Aloxaf/fzf-tab
+
 zinit ice wait"!0" lucid
 zinit load asdf-vm/asdf
   
