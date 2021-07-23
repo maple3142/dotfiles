@@ -60,10 +60,11 @@ zinit ice wait"!0" lucid
 zinit load asdf-vm/asdf
   
 # Path
-export PATH=$HOME/.local/bin:/usr/local/bin:"$PATH"
+export PATH=$HOME/.local/bin:"$PATH"
 
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]] then
+	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
 	alias ex=/mnt/c/Windows/explorer.exe
 	export DISPLAY=$(route -n | grep UG | head -n1 | awk '{print $2}'):0
 	# Copy .ssh
