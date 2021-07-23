@@ -73,6 +73,12 @@ if [[ -v WSL_DISTRO_NAME ]] then
 		/bin/cp -rf "/mnt/c/Users/$(whoami)/.ssh" ~/.ssh
 		chmod 600 ~/.ssh/*
 	}
+	# Start subsystemctl if exists
+	if (( $+commands[subsystemctl] )); then
+		if ! subsystemctl is-running; then
+			sudo subsystemctl start
+		fi
+	fi
 fi
 
 # Fix ssh autocomplete
