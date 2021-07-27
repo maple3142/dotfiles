@@ -48,7 +48,7 @@ zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
-zinit wait lucid from"gh-r" as"program" for \
+zinit lucid from"gh-r" as"program" for \
   pick"jq-*" mv"jq-* -> jq" stedolan/jq \
   pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
   pick"exa-linux-*" extract mv"*/exa -> exa" ogham/exa \
