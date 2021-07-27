@@ -71,6 +71,7 @@ export PATH=$HOME/.local/bin:"$PATH"
 if [[ -v WSL_DISTRO_NAME ]] then
 	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
 	alias ex=/mnt/c/Windows/explorer.exe
+	alias clip=/mnt/c/Windows/System32/clip.exe
 	alias code='"/mnt/c/Program Files/Microsoft VS Code/bin/code"'
 	export DISPLAY=$(route -n | grep UG | head -n1 | awk '{print $2}'):0
 	# Copy .ssh
