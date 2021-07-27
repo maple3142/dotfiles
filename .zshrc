@@ -48,7 +48,7 @@ zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
-zinit lucid from"gh-r" as"program" for \
+zinit wait lucid from"gh-r" as"program" for \
   pick"jq-*" mv"jq-* -> jq" stedolan/jq \
   pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
   pick"exa-linux-*" extract mv"*/exa -> exa" ogham/exa \
@@ -56,14 +56,24 @@ zinit lucid from"gh-r" as"program" for \
   pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd \
   pick"fzf-*amd64-*" extract mv"*/fzf -> fzf" @junegunn/fzf
 
-zinit ice lucid wait'0c' multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
+zinit ice lucid wait multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
 zinit light junegunn/fzf
 
+zinit ice wait lucid
 zinit light Aloxaf/fzf-tab
 
-zinit ice wait"!0" lucid
+zinit ice wait lucid atload"__asdf_load"
 zinit load asdf-vm/asdf
-  
+
+# asdf completion
+__asdf_load(){
+	source $HOME/.asdf/completions/asdf.bash
+}
+
+# bashcompinit
+autoload bashcompinit
+bashcompinit
+
 # Path
 export PATH=$HOME/.local/bin:"$PATH"
 
