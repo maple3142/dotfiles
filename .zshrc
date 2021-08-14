@@ -75,6 +75,7 @@ autoload bashcompinit
 bashcompinit
 
 # Path
+export PATH="$(echo $PATH | sed 's/\/usr\/sbin//')"
 export PATH=$HOME/.local/bin:"$PATH"
 
 # WSL specific
