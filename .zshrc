@@ -67,7 +67,7 @@ zinit load asdf-vm/asdf
 
 # asdf completion
 __asdf_load(){
-	source $HOME/.asdf/completions/asdf.bash
+	source $HOME/.zinit/plugins/asdf-vm---asdf/completions/asdf.bash
 }
 
 # bashcompinit
@@ -125,7 +125,7 @@ if [[ -d ~/.poetry ]] then
 fi
 
 # Rust (uses rustup)
-if [[ -d ~/.cargo ]] then
+if [[ -d ~/.cargo/env ]] then
 	source ~/.cargo/env
 fi
 
