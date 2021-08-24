@@ -1,14 +1,23 @@
+#!/usr/bin/zsh
 # GPG TTY
 export GPG_TTY=$(tty)
 
-# Keychain
-if (( $+commands[keychain] )) then
-	if [[ -a ~/.ssh/id_ed25519 ]] then
-		eval `keychain --quiet --eval --agents ssh id_ed25519`
-	fi
-	if [[ -a ~/.ssh/id_rsa ]] then
-		eval `keychain --quiet --eval --agents ssh id_rsa`
-	fi
+# Setup ssh agent
+export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
+ssh-add -l 2>/dev/null >/dev/null
+if [[ $? -ge 2 ]]; then
+  if [[ -a $SSH_AUTH_SOCK ]] then
+    rm $SSH_AUTH_SOCK
+  fi
+  ssh-agent -a $SSH_AUTH_SOCK >/dev/null
+fi
+add_key_if_not_exist(){
+	ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
+}
+if [[ -a ~/.ssh/id_ed25519 ]] then
+	add_key_if_not_exist ~/.ssh/id_ed25519
+elif [[ -a ~/.ssh/id_rsa ]] then
+	add_key_if_not_exist ~/.ssh/id_rsa
 fi
 
 # Powerlevel10k Instant Prompt
@@ -134,6 +143,12 @@ if [[ -d ~/.go ]] then
 	export GOROOT="$HOME/.go"
 	export PATH="$GOROOT/bin:$PATH"
 fi
+
+# Ruby bins
+if [[ -d ~/.gem/ruby/3.0.0/bin ]] then
+	export PATH="$HOME/.gem/ruby/3.0.0/bin:$PATH"
+fi
+
 # Miniconda3
 if [[ -d ~/miniconda3 ]] then
 	source ~/miniconda3/etc/profile.d/conda.sh
