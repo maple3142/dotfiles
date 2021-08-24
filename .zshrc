@@ -50,7 +50,7 @@ zinit wait lucid light-mode for \
       zdharma/fast-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
       zsh-users/zsh-autosuggestions
-zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
+zinit wait lucid atload"zicompinit; zicdreplay" for \
   zsh-users/zsh-completions \
   esc/conda-zsh-completion
 
