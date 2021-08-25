@@ -1,14 +1,27 @@
 #!/usr/bin/zsh
 # Start genie in WSL if exists
+if [[ -f .subsystemctl_env ]] then
+	export WSL_INTEROP= # idk why it doesn't work without this line...
+	source .subsystemctl_env
+	rm .subsystemctl_env
+	stty -echoprt # fix backspace
+fi
 if [[ -v WSL_DISTRO_NAME ]] then
-	if (( $+commands[genie] )); then
-		if ! genie -r >/dev/null; then
-			sudo genie -i
+	if (( $+commands[subsystemctl] )); then
+		if ! subsystemctl is-running; then
+			sudo subsystemctl start
 		fi
-		if ! genie -b >/dev/null; then
-			exec genie -s
+		if ! subsystemctl is-inside; then
+			cat > .subsystemctl_env << EOF
+WSL_DISTRO_NAME=$WSL_DISTRO_NAME
+WSL_INTEROP=$WSL_INTEROP
+WSLENV=$WSLENV
+DISPLAY=$DISPLAY
+WAYLAND_DISPLAY=$WAYLAND_DISPLAY
+PULSE_SERVER=$PULSE_SERVER
+EOF
+			exec subsystemctl shell --quiet
 		fi
-		stty -echoprt
 	fi
 fi
 
