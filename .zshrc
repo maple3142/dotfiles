@@ -1,4 +1,17 @@
 #!/usr/bin/zsh
+# Start genie in WSL if exists
+if [[ -v WSL_DISTRO_NAME ]] then
+	if (( $+commands[genie] )); then
+		if ! genie -r >/dev/null; then
+			sudo genie -i
+		fi
+		if ! genie -b >/dev/null; then
+			exec genie -s
+		fi
+		stty -echoprt
+	fi
+fi
+
 # GPG TTY
 export GPG_TTY=$(tty)
 
@@ -100,12 +113,6 @@ if [[ -v WSL_DISTRO_NAME ]] then
 		/bin/cp -rf "/mnt/c/Users/$(whoami)/.ssh" ~/.ssh
 		chmod 600 ~/.ssh/*
 	}
-	# Start subsystemctl if exists
-	if (( $+commands[subsystemctl] )); then
-		if ! subsystemctl is-running; then
-			sudo subsystemctl start
-		fi
-	fi
 fi
 
 # Fix ssh autocomplete
