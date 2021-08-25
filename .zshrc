@@ -1,7 +1,6 @@
 #!/usr/bin/zsh
 # Start genie in WSL if exists
 if [[ -f .subsystemctl_env ]] then
-	export WSL_INTEROP= # idk why it doesn't work without this line...
 	source .subsystemctl_env
 	rm .subsystemctl_env
 	stty -echoprt # fix backspace
@@ -13,14 +12,15 @@ if [[ -v WSL_DISTRO_NAME ]] then
 		fi
 		if ! subsystemctl is-inside; then
 			cat > .subsystemctl_env << EOF
-WSL_DISTRO_NAME=$WSL_DISTRO_NAME
-WSL_INTEROP=$WSL_INTEROP
-WSLENV=$WSLENV
-DISPLAY=$DISPLAY
-WAYLAND_DISPLAY=$WAYLAND_DISPLAY
-PULSE_SERVER=$PULSE_SERVER
+export WSL_DISTRO_NAME=$WSL_DISTRO_NAME
+export WSL_INTEROP=$WSL_INTEROP
+export WSLENV=$WSLENV
+export DISPLAY=$DISPLAY
+export WAYLAND_DISPLAY=$WAYLAND_DISPLAY
+export PULSE_SERVER=$PULSE_SERVER
 EOF
 			exec subsystemctl shell --quiet
+			rm .subsystemctl_env # should never reach here, but it is convenient for testing...
 		fi
 	fi
 fi
