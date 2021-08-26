@@ -121,7 +121,7 @@ if [[ -v WSL_DISTRO_NAME ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
 	alias clip=/mnt/c/Windows/System32/clip.exe
 	alias code='"/mnt/c/Program Files/Microsoft VS Code/bin/code"'
-	export DISPLAY=$(route -n | grep UG | head -n1 | awk '{print $2}'):0
+	export DISPLAY=$(ip route show default | awk '{print $3}'):0
 	# Copy .ssh
 	upd_ssh(){
 		rm -rf ~/.ssh
