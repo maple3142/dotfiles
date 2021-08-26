@@ -12,12 +12,13 @@ if [[ -v WSL_DISTRO_NAME ]] then
 		fi
 		if ! subsystemctl is-inside; then
 			cat > ~/.subsystemctl_env << EOF
-export WSL_DISTRO_NAME=$WSL_DISTRO_NAME
-export WSL_INTEROP=$WSL_INTEROP
-export WSLENV=$WSLENV
-export DISPLAY=$DISPLAY
-export WAYLAND_DISPLAY=$WAYLAND_DISPLAY
-export PULSE_SERVER=$PULSE_SERVER
+export PATH="$PATH"
+export WSL_DISTRO_NAME="$WSL_DISTRO_NAME"
+export WSL_INTEROP="$WSL_INTEROP"
+export WSLENV="$WSLENV"
+export DISPLAY="$DISPLAY"
+export WAYLAND_DISPLAY="$WAYLAND_DISPLAY"
+export PULSE_SERVER="$PULSE_SERVER"
 cd "$PWD"
 EOF
 			exec subsystemctl shell --quiet
@@ -111,7 +112,7 @@ autoload bashcompinit
 bashcompinit
 
 # Path
-export PATH="$(echo $PATH | sed 's/\/usr\/sbin//')"
+export PATH="$(echo $PATH | sed 's/\/usr\/sbin://')"
 export PATH=$HOME/.local/bin:"$PATH"
 
 # WSL specific
