@@ -6,6 +6,14 @@ if [[ -f ~/.subsystemctl_env ]] then
 	stty -echoprt # fix backspace
 fi
 if [[ -v WSL_DISTRO_NAME ]] then
+	if [[ -S /mnt/wslg/.X11-unix/X0 ]] then
+		WSLG_EXIST=1  # prefer wslg if it exists
+		if [[ ! -S /tmp/.X11-unix/X0 ]] then
+			# fix wslg not working in subsystemctl namespace
+			# https://github.com/arkane-systems/genie/issues/175#issuecomment-922526126
+			ln -s /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/X0
+		fi
+	fi
 	if (( $+commands[subsystemctl] )); then
 		if ! subsystemctl is-running; then
 			sudo subsystemctl start
@@ -121,7 +129,9 @@ if [[ -v WSL_DISTRO_NAME ]] then
 	alias ex=/mnt/c/Windows/explorer.exe
 	alias clip=/mnt/c/Windows/System32/clip.exe
 	alias code='"/mnt/c/Program Files/Microsoft VS Code/bin/code"'
-	export DISPLAY=$(ip route show default | awk '{print $3}'):0
+	if [[ "1" != "$WSLG_EXIST" ]] then
+		export DISPLAY=$(ip route show default | awk '{print $3}'):0
+	fi
 	# Copy .ssh
 	upd_ssh(){
 		rm -rf ~/.ssh
