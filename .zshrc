@@ -83,7 +83,7 @@ zinit wait lucid for \
 zinit wait lucid light-mode for \
   zsh-users/zsh-history-substring-search \
   atinit"zicompinit; zicdreplay" \
-      zdharma/fast-syntax-highlighting \
+      zdharma-continuum/fast-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
       zsh-users/zsh-autosuggestions
 zinit wait lucid atload"zicompinit; zicdreplay" for \
