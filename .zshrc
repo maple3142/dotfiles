@@ -128,7 +128,7 @@ if [[ -v WSL_DISTRO_NAME ]] then
 	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
 	alias ex=/mnt/c/Windows/explorer.exe
 	alias clip=/mnt/c/Windows/System32/clip.exe
-	alias code='"/mnt/c/Program Files/Microsoft VS Code/bin/code"'
+	alias code='"/mnt/c/Users/maple3142/AppData/Local/Programs/Microsoft VS Code/bin/code"'
 	if [[ "1" != "$WSLG_EXIST" ]] then
 		export DISPLAY=$(ip route show default | awk '{print $3}'):0
 	fi
