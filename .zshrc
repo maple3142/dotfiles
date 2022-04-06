@@ -39,21 +39,23 @@ fi
 export GPG_TTY=$(tty)
 
 # Setup ssh agent
-export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
-ssh-add -l 2>/dev/null >/dev/null
-if [[ $? -ge 2 ]]; then
-  if [[ -a $SSH_AUTH_SOCK ]] then
-    rm $SSH_AUTH_SOCK
+if (( $+commands[ssh-add] )); then
+  export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
+  ssh-add -l 2>/dev/null >/dev/null
+  if [[ $? -ge 2 ]]; then
+    if [[ -a $SSH_AUTH_SOCK ]] then
+      rm $SSH_AUTH_SOCK
+    fi
+    ssh-agent -a $SSH_AUTH_SOCK >/dev/null
   fi
-  ssh-agent -a $SSH_AUTH_SOCK >/dev/null
-fi
-add_key_if_not_exist(){
-	ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
-}
-if [[ -a ~/.ssh/id_ed25519 ]] then
-	add_key_if_not_exist ~/.ssh/id_ed25519
-elif [[ -a ~/.ssh/id_rsa ]] then
-	add_key_if_not_exist ~/.ssh/id_rsa
+  add_key_if_not_exist(){
+	  ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
+  }
+  if [[ -a ~/.ssh/id_ed25519 ]] then
+	  add_key_if_not_exist ~/.ssh/id_ed25519
+  elif [[ -a ~/.ssh/id_rsa ]] then
+	  add_key_if_not_exist ~/.ssh/id_rsa
+  fi
 fi
 
 # Powerlevel10k Instant Prompt
