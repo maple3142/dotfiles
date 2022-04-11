@@ -82,6 +82,9 @@ zinit wait lucid for \
   OMZL::key-bindings.zsh \
   OMZP::sudo
 
+zinit ice wait lucid
+zinit light Aloxaf/fzf-tab
+
 zinit wait lucid light-mode for \
   zsh-users/zsh-history-substring-search \
   atinit"zicompinit; zicdreplay" \
@@ -105,9 +108,6 @@ zinit lucid from"gh-r" as"program" for \
 
 zinit ice lucid wait multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
 zinit light junegunn/fzf
-
-zinit ice wait lucid
-zinit light Aloxaf/fzf-tab
 
 zinit ice wait lucid atload"__asdf_load"
 zinit load asdf-vm/asdf
