@@ -69,6 +69,8 @@ echo -ne "\033]0;$USER@$HOST\007"
 # Zsh settings
 ZSH_DISABLE_COMPFIX="true"
 HIST_STAMPS="yyyy-mm-dd"
+HISTSIZE=500000
+SAVEHIST=500000
 zstyle ":completion:*" menu select
 setopt autocd
 unsetopt beep
