@@ -106,7 +106,7 @@ zinit lucid from"gh-r" as"program" for \
   pick"exa-linux-*" extract mv"*/exa -> exa" ogham/exa \
   pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat \
   pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd \
-  pick"fzf-*amd64-*" extract mv"*/fzf -> fzf" @junegunn/fzf
+  pick"fzf-*linux_amd64-*" extract mv"fzf -> fzf" @junegunn/fzf
 
 zinit ice lucid wait multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
 zinit light junegunn/fzf
