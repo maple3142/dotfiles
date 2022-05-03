@@ -189,6 +189,13 @@ fi
 if [[ -d ~/miniconda3 ]] then
 	source ~/miniconda3/etc/profile.d/conda.sh
 fi
+ctf() {
+    # A fast but incomplete alternative to `conda activate ctf`
+    PATH="$HOME/miniconda3/envs/ctf/bin:$PATH"
+    CONDA_PREFIX="$HOME/miniconda3/envs/ctf"
+    CONDA_DEFAULT_ENV="ctf"
+    CONDA_PROMPT_MODIFIER="(ctf)"
+}
 
 # CHROME_PATH
 if (( $+commands[chromium] )) then
