@@ -191,10 +191,21 @@ if [[ -d ~/miniconda3 ]] then
 fi
 ctf() {
     # A fast but incomplete alternative to `conda activate ctf`
-    PATH="$HOME/miniconda3/envs/ctf/bin:$PATH"
-    CONDA_PREFIX="$HOME/miniconda3/envs/ctf"
-    CONDA_DEFAULT_ENV="ctf"
-    CONDA_PROMPT_MODIFIER="(ctf)"
+    _PREFIX="$HOME/miniconda3/envs/ctf"
+    _BINDIR="$_PREFIX/bin"
+    if [[ -v SIMPLE_CONDA ]] then
+        export PATH=$(echo $PATH | sed "s|$_BINDIR||g")
+        unset CONDA_PREFIX
+        unset CONDA_DEFAULT_ENV
+        unset CONDA_PROMPT_MODIFIER
+        unset SIMPLE_CONDA
+    else
+        export PATH="$_BINDIR:$PATH"
+        export CONDA_PREFIX=_PREFIX
+        export CONDA_DEFAULT_ENV="ctf"
+        export CONDA_PROMPT_MODIFIER="(ctf)"
+        export SIMPLE_CONDA=1
+    fi
 }
 
 # CHROME_PATH
