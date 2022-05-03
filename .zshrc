@@ -191,7 +191,8 @@ if [[ -d ~/miniconda3 ]] then
 fi
 ctf() {
     # A fast but incomplete alternative to `conda activate ctf`
-    _PREFIX="$HOME/miniconda3/envs/ctf"
+    _ENV="ctf"
+    _PREFIX="$HOME/miniconda3/envs/$_ENV"
     _BINDIR="$_PREFIX/bin"
     if [[ -v SIMPLE_CONDA ]] then
         export PATH=$(echo $PATH | sed "s|$_BINDIR||g")
@@ -199,12 +200,20 @@ ctf() {
         unset CONDA_DEFAULT_ENV
         unset CONDA_PROMPT_MODIFIER
         unset SIMPLE_CONDA
+        functions[conda]=$functions[orig_conda]
+        unset -f orig_conda
     else
-        export PATH="$_BINDIR:$PATH"
-        export CONDA_PREFIX=_PREFIX
-        export CONDA_DEFAULT_ENV="ctf"
-        export CONDA_PROMPT_MODIFIER="(ctf)"
-        export SIMPLE_CONDA=1
+        if [[ -v CONDA_PREFIX ]] then
+            echo "Please deactivate official conda first"
+        else
+            export PATH="$_BINDIR:$PATH"
+            export CONDA_PREFIX=_PREFIX
+            export CONDA_DEFAULT_ENV=_ENV
+            export CONDA_PROMPT_MODIFIER="($_ENV)"
+            export SIMPLE_CONDA=1
+            functions[orig_conda]=$functions[conda]
+            conda() { echo "Please deactivate custom conda first" }
+        fi
     fi
 }
 
