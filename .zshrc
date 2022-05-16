@@ -134,7 +134,8 @@ if [[ -v WSL_DISTRO_NAME ]] then
 	alias clip=/mnt/c/Windows/System32/clip.exe
 	alias code='"/mnt/c/Users/maple3142/AppData/Local/Programs/Microsoft VS Code/bin/code"'
 	if [[ "1" != "$WSLG_EXIST" ]] then
-		export DISPLAY=$(ip route show default | awk '{print $3}'):0
+        host_ip=$(ip route show default | awk '{print $3}')
+		export DISPLAY=$host_ip:0
 	fi
 	# Copy .ssh
 	upd_ssh(){
@@ -207,8 +208,8 @@ ctf() {
             echo "Please deactivate official conda first"
         else
             export PATH="$_BINDIR:$PATH"
-            export CONDA_PREFIX=_PREFIX
-            export CONDA_DEFAULT_ENV=_ENV
+            export CONDA_PREFIX=$_PREFIX
+            export CONDA_DEFAULT_ENV=$_ENV
             export CONDA_PROMPT_MODIFIER="($_ENV)"
             export SIMPLE_CONDA=1
             functions[orig_conda]=$functions[conda]
