@@ -39,7 +39,7 @@ fi
 export GPG_TTY=$(tty)
 
 # Setup ssh agent
-if (( $+commands[ssh-add] )); then
+if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
   export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
   ssh-add -l 2>/dev/null >/dev/null
   if [[ $? -ge 2 ]]; then
