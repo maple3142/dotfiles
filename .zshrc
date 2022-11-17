@@ -14,7 +14,7 @@ if [[ -v WSL_DISTRO_NAME ]] then
 			ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix
 		fi
 	fi
-	if (( $+commands[subsystemctl] )); then
+	if [[ "$(ps --no-headers -o comm 1)" != "systemd" ]] && (( $+commands[subsystemctl] )); then
 		if ! subsystemctl is-running; then
 			sudo subsystemctl start
 		fi
