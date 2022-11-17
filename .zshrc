@@ -11,7 +11,7 @@ if [[ -v WSL_DISTRO_NAME ]] then
 		if [[ ! -S /tmp/.X11-unix/X0 ]] then
 			# fix wslg not working in subsystemctl namespace
 			# https://github.com/arkane-systems/genie/issues/175#issuecomment-922526126
-			ln -s /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/X0
+			ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix
 		fi
 	fi
 	if (( $+commands[subsystemctl] )); then
@@ -71,6 +71,7 @@ ZSH_DISABLE_COMPFIX="true"
 HIST_STAMPS="yyyy-mm-dd"
 HISTSIZE=500000
 SAVEHIST=500000
+WORDCHARS='*?_-.[]~&;!#$%^(){}<>'  # removed = and /
 zstyle ":completion:*" menu select
 setopt autocd
 unsetopt beep
@@ -174,6 +175,9 @@ fi
 if [[ -d ~/.cargo/env ]] then
 	source ~/.cargo/env
 fi
+if [[ -d ~/.cargo/bin ]] then
+    export PATH="$HOME/.cargo/bin:$PATH"
+fi
 
 # Golang
 if [[ -d ~/.go ]] then
@@ -242,6 +246,9 @@ fi
 ssh(){
 	/usr/bin/ssh "$@"
 	echo -ne "\033]0;$USER@$HOST\007"
+}
+dl(){
+    curl -LJO "$1"
 }
 
 # P10k Initialize
