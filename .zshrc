@@ -255,6 +255,16 @@ ssh(){
 dl(){
     curl -LJO "$1"
 }
+if (( $+commands[rclone] )) then
+    rclone(){
+        if [ -z "${RCLONE_CONFIG_PASS}" ]; then
+            echo -n 'Enter Rclone config password: '
+            read -s RCLONE_CONFIG_PASS && export RCLONE_CONFIG_PASS=$RCLONE_CONFIG_PASS
+            echo
+        fi
+        command rclone "$@"
+    }
+fi
 
 # P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
