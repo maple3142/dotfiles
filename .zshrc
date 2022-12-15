@@ -112,7 +112,7 @@ zinit lucid from"gh-r" as"program" for \
 zinit ice lucid wait multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
 zinit light junegunn/fzf
 
-zinit ice wait lucid atload"__asdf_load"
+zinit ice wait lucid  # atload"__asdf_load"
 zinit load asdf-vm/asdf
 
 # asdf completion
@@ -225,6 +225,11 @@ ctf() {
 # CHROME_PATH
 if (( $+commands[chromium] )) then
 	export CHROME_PATH="$(which chromium)"
+fi
+
+# kubectl
+if (( $+commands[kubectl] )) then
+    kubectl completion zsh > ~/.zinit/completions/_kubectl
 fi
 
 # Aliases
