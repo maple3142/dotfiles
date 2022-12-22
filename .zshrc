@@ -163,6 +163,9 @@ export LANG=en_US.UTF-8
 # Editor
 export EDITOR=vim
 
+# Colored Man Page
+export MANPAGER="less -R --use-color -Dd+r -Du+b"
+
 # fzf
 export FZF_DEFAULT_COMMAND='fd'
 
