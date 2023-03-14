@@ -293,8 +293,12 @@ if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+co
             echo "Syntax: $0 [port] or $0 [host] [port]"
             return 1
         fi
+        sess="tunnel-$host-$port"
+        if ! (tmux has-session -t $sess 2>&1 | grep -q "can't find"); then
+            tmux at -t $sess
+            return 0
+        fi
         proxy_port=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1])')
-        sess="tunnel-$proxy_port"
         tmux new -s "$sess" \
             "mitmweb --mode reverse:http://$host:$port -p $proxy_port --no-web-open-browser --web-port 4040"\; \
             split-window -v \
