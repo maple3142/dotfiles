@@ -79,52 +79,50 @@ unsetopt beep
 unsetopt nomatch
 
 # ZInit
-# source ~/.zinit/bin/zinit.zsh
 ZINIT_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit"
 ZINIT_HOME="$ZINIT_DIR/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
-zinit snippet OMZL::history.zsh
-zinit wait lucid for \
-  OMZL::key-bindings.zsh \
-  OMZP::sudo
+zinit lucid light-mode for \
+    OMZL::history.zsh \
+    OMZL::key-bindings.zsh \
+    OMZP::sudo/sudo.plugin.zsh
 
-zinit ice wait lucid
+zinit ice wait lucid multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
+zinit light junegunn/fzf
+
+zinit ice wait light-mode lucid blockf compile'lib/*f*~*.zwc'
 zinit light Aloxaf/fzf-tab
 
 zinit wait lucid light-mode for \
-  zsh-users/zsh-history-substring-search \
-  atinit"zicompinit; zicdreplay" \
-      zdharma-continuum/fast-syntax-highlighting \
-  atload"_zsh_autosuggest_start" \
-      zsh-users/zsh-autosuggestions
-zinit wait lucid atload"zicompinit; zicdreplay" for \
-  zsh-users/zsh-completions \
-  esc/conda-zsh-completion
+    atload'bindkey "^[[A" history-substring-search-up; bindkey "^[[B" history-substring-search-down' \
+        zsh-users/zsh-history-substring-search \
+    atinit'zicompinit; zicdreplay' atload'FAST_HIGHLIGHT[chroma-man]=' \
+    atclone'(){local f;cd -q →*;for f (*~*.zwc){zcompile -Uz -- ${f}};}' \
+    compile'.*fast*~*.zwc' nocompletions atpull'%atclone' \
+        zdharma-continuum/fast-syntax-highlighting \
+    atload'_zsh_autosuggest_start' \
+        zsh-users/zsh-autosuggestions
+
+zinit wait lucid light-mode as'completion' atpull'zinit cclear' blockf for \
+    zsh-users/zsh-completions \
+    esc/conda-zsh-completion
 
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
 zinit lucid from"gh-r" as"program" for \
-  pick"jq-*" mv"jq-* -> jq" stedolan/jq \
-  pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
-  pick"exa-linux-*" extract mv"*/exa -> exa" ogham/exa \
-  pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat \
-  pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd \
-  pick"fzf-*linux_amd64-*" extract mv"fzf -> fzf" @junegunn/fzf
+    pick"jq-*" mv"jq-* -> jq" stedolan/jq \
+    pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
+    pick"exa-linux-*" extract mv"*/exa -> exa" ogham/exa \
+    pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat \
+    pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd \
+    pick"fzf-*linux_amd64-*" extract mv"fzf -> fzf" @junegunn/fzf
 
-zinit ice lucid wait multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
-zinit light junegunn/fzf
-
-zinit ice wait lucid  # atload"__asdf_load"
-zinit load asdf-vm/asdf
-
-# asdf completion
-__asdf_load(){
-	source $HOME/.zinit/plugins/asdf-vm---asdf/completions/asdf.bash
-}
+zinit ice wait lucid
+zinit light asdf-vm/asdf
 
 # bashcompinit
 autoload bashcompinit
