@@ -325,9 +325,13 @@ ncl() {
 
 copy() {
     # copy with OSC 52 escape sequence
-    printf "\033]52;c;"
-    base64 -w 0
-    printf "\a"
+    # idk why printing to terminal doesn't work with curl...
+    f=$(mktemp)
+    printf "\e]52;c;" > $f
+    base64 -w 0 >> $f
+    printf "\a" >> $f
+    \cat $f
+    rm $f
 }
 
 # P10k Initialize
