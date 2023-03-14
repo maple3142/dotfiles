@@ -295,6 +295,19 @@ if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+co
     }
 fi
 
+# Better `nc -lv` using ssh port forwarding
+ncl() {
+    if [[ ! $# -eq 2 ]]; then
+        echo "Syntax: $0 [host] [port]"
+        return 1
+    fi
+    # need to enable GatewayPorts in remote sshd_config
+    host=$1
+    port=$2
+    ssh -R $port:0.0.0.0:$port $host -N &
+    nc -lv $port
+    kill -9 $!
+}
 
 # P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
