@@ -1,14 +1,14 @@
 #!/usr/bin/zsh
 # Start genie in WSL if exists
-if [[ -f ~/.subsystemctl_env ]] then
+if [[ -f ~/.subsystemctl_env ]]; then
 	source ~/.subsystemctl_env
 	rm ~/.subsystemctl_env
 	stty -echoprt # fix backspace
 fi
-if [[ -v WSL_DISTRO_NAME ]] then
-	if [[ -S /mnt/wslg/.X11-unix/X0 ]] then
+if [[ -v WSL_DISTRO_NAME ]]; then
+	if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
 		WSLG_EXIST=1  # prefer wslg if it exists
-		if [[ ! -S /tmp/.X11-unix/X0 ]] then
+		if [[ ! -S /tmp/.X11-unix/X0 ]]; then
 			# fix wslg not working in subsystemctl namespace
 			# https://github.com/arkane-systems/genie/issues/175#issuecomment-922526126
 			ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix
@@ -43,7 +43,7 @@ if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
   export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
   ssh-add -l 2>/dev/null >/dev/null
   if [[ $? -ge 2 ]]; then
-    if [[ -a $SSH_AUTH_SOCK ]] then
+    if [[ -a $SSH_AUTH_SOCK ]]; then
       rm $SSH_AUTH_SOCK
     fi
     ssh-agent -a $SSH_AUTH_SOCK >/dev/null
@@ -51,9 +51,9 @@ if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
   add_key_if_not_exist(){
 	  ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
   }
-  if [[ -a ~/.ssh/id_ed25519 ]] then
+  if [[ -a ~/.ssh/id_ed25519 ]]; then
 	  add_key_if_not_exist ~/.ssh/id_ed25519
-  elif [[ -a ~/.ssh/id_rsa ]] then
+  elif [[ -a ~/.ssh/id_rsa ]]; then
 	  add_key_if_not_exist ~/.ssh/id_rsa
   fi
 fi
@@ -129,12 +129,12 @@ export PATH="$(echo $PATH | sed 's/\/usr\/sbin://')"
 export PATH=$HOME/.local/bin:"$PATH"
 
 # WSL specific
-if [[ -v WSL_DISTRO_NAME ]] then
+if [[ -v WSL_DISTRO_NAME ]]; then
 	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
 	alias ex=/mnt/c/Windows/explorer.exe
 	alias clip=/mnt/c/Windows/System32/clip.exe
 	alias code='"/mnt/c/Users/maple3142/AppData/Local/Programs/Microsoft VS Code/bin/code"'
-	if [[ "1" != "$WSLG_EXIST" ]] then
+	if [[ "1" != "$WSLG_EXIST" ]]; then
         host_ip=$(ip route show default | awk '{print $3}')
 		export DISPLAY=$host_ip:0
 	fi
@@ -170,31 +170,31 @@ export MANPAGER="less -R --use-color -Dd+r -Du+b"
 export FZF_DEFAULT_COMMAND='fd'
 
 # Python (Poetry)
-if [[ -d ~/.poetry ]] then
+if [[ -d ~/.poetry ]]; then
 	export PATH="$HOME/.poetry/bin:$PATH"
 fi
 
 # Rust (uses rustup)
-if [[ -d ~/.cargo/env ]] then
+if [[ -d ~/.cargo/env ]]; then
 	source ~/.cargo/env
 fi
-if [[ -d ~/.cargo/bin ]] then
+if [[ -d ~/.cargo/bin ]]; then
     export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
 # Golang
-if [[ -d ~/.go ]] then
+if [[ -d ~/.go ]]; then
 	export GOROOT="$HOME/.go"
 	export PATH="$GOROOT/bin:$PATH"
 fi
 
 # Ruby bins
-if [[ -d ~/.gem/ruby/3.0.0/bin ]] then
+if [[ -d ~/.gem/ruby/3.0.0/bin ]]; then
 	export PATH="$HOME/.gem/ruby/3.0.0/bin:$PATH"
 fi
 
 # Miniconda3
-if [[ -d ~/miniconda3 ]] then
+if [[ -d ~/miniconda3 ]]; then
 	source ~/miniconda3/etc/profile.d/conda.sh
 fi
 ctf() {
@@ -202,7 +202,7 @@ ctf() {
     _ENV="ctf"
     _PREFIX="$HOME/miniconda3/envs/$_ENV"
     _BINDIR="$_PREFIX/bin"
-    if [[ -v SIMPLE_CONDA ]] then
+    if [[ -v SIMPLE_CONDA ]]; then
         export PATH=$(echo $PATH | sed "s|$_BINDIR||g")
         unset CONDA_PREFIX
         unset CONDA_DEFAULT_ENV
@@ -211,7 +211,7 @@ ctf() {
         functions[conda]=$functions[orig_conda]
         unset -f orig_conda
     else
-        if [[ -v CONDA_PREFIX ]] then
+        if [[ -v CONDA_PREFIX ]]; then
             echo "Please deactivate official conda first"
         else
             export PATH="$_BINDIR:$PATH"
@@ -283,7 +283,7 @@ if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+co
             echo "Syntax: $0 [port] or $0 [host] [port]"
             return 1
         fi
-        proxy_port=`python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1])'`
+        proxy_port=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1])')
         sess="tunnel-$proxy_port"
         tmux new -s "$sess" \
             "mitmweb --mode reverse:http://$host:$port -p $proxy_port --no-web-open-browser --web-port 4040"\; \
