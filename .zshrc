@@ -269,6 +269,20 @@ if (( $+commands[rclone] )) then
     }
 fi
 
+# Poor mans ngrok
+if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+commands[mitmweb] )) then
+    CF_TUNNEL=ctf
+    SESS_NAME=tunnel
+    tunnel() {
+        PORT=`python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1])'`
+        tmux new -s "$SESS_NAME" \
+            "mitmweb --mode reverse:http://localhost:$1 -p $PORT --no-web-open-browser --web-port 4040"\; \
+            'split-window' -v \
+            "cloudflared tunnel --url http://localhost:$PORT run $CF_TUNNEL"\;
+    }
+fi
+
+
 # P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
