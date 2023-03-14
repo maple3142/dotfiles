@@ -326,10 +326,21 @@ ncl() {
 copy() {
     # copy with OSC 52 escape sequence
     # idk why printing to terminal doesn't work with curl...
+    # tmux and screen bypass from https://github.com/rumpelsepp/oscclip/
     f=$(mktemp)
-    printf "\e]52;c;" > $f
+    if [[ ! -z $TMUX ]]; then
+        printf "\033Ptmux;\033" >> $f
+    elif [[ $TERM =~ ^screen ]]; then
+        printf "\033P" >> $f
+    fi
+    printf "\e]52;c;" >> $f
     base64 -w 0 >> $f
     printf "\a" >> $f
+    if [[ ! -z $TMUX ]]; then
+        printf "\033\\" >> $f
+    elif [[ $TERM =~ ^screen ]]; then
+        printf "\033\\" >> $f
+    fi
     \cat $f
     rm $f
 }
