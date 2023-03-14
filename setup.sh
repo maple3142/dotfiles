@@ -22,9 +22,6 @@ log "Copying dotfiles to home..."
 cp -a -rf -- .temphome/{.zshrc,.p10k.zsh,.vimrc,.prettierrc,.tmux.conf} .
 log "Removing .temphome..."
 rm -rf .temphome
-log "Installing zinit..."
-mkdir .zinit
-git clone https://github.com/zdharma-continuum/zinit.git ~/.zinit/bin --depth=1
 log "Changing shell to zsh..."
 chsh -s "$(which zsh)"
 log "All done! Restart your terminal or enter \`zsh\` to enjoy!"

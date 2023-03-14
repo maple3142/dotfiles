@@ -79,7 +79,12 @@ unsetopt beep
 unsetopt nomatch
 
 # ZInit
-source ~/.zinit/bin/zinit.zsh
+# source ~/.zinit/bin/zinit.zsh
+ZINIT_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit"
+ZINIT_HOME="$ZINIT_DIR/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
 zinit snippet OMZL::history.zsh
 zinit wait lucid for \
@@ -233,7 +238,7 @@ fi
 
 # kubectl
 if (( $+commands[kubectl] )) then
-    kubectl completion zsh > ~/.zinit/completions/_kubectl
+    kubectl completion zsh > $ZINIT_DIR/completions/_kubectl
 fi
 
 # Aliases
