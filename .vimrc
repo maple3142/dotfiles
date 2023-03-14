@@ -8,13 +8,13 @@ set virtualedit=onemore
 set autoindent
 set incsearch
 filetype plugin indent on
+" map Ctrl-C to yank 
+vmap <C-c> y 
 
-" WSL yank support
-let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
-if executable(s:clip)
-    augroup WSLYank
-        autocmd!
-        autocmd TextYankPost * if v:event.operator ==# 'y' | call system('cat |' . s:clip, @0) | endif
-    augroup END
-endif
+" https://chromium.googlesource.com/apps/libapps/+/master/hterm/etc/osc52.vim
+source ~/.vim/osc52.vim
+augroup YankWithOSC52
+    autocmd!
+    autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | call SendViaOSC52(getreg('"')) | endif
+augroup END
 

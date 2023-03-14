@@ -19,7 +19,7 @@ cd ~ || { echo "Unable to cd ~"; exit 1; }
 log "Cloning dotfiles to .temphome..."
 git clone https://github.com/maple3142/dotfiles.git .temphome
 log "Copying dotfiles to home..."
-cp -a -rf -- .temphome/{.zshrc,.p10k.zsh,.vimrc,.prettierrc,.tmux.conf} .
+cp -a -rf -- .temphome/{.zshrc,.p10k.zsh,.vimrc,.prettierrc,.tmux.conf,.vim} .
 log "Removing .temphome..."
 rm -rf .temphome
 log "Changing shell to zsh..."

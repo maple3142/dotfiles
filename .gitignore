@@ -5,6 +5,7 @@
 !.zshrc
 !.p10k.zsh
 !.vimrc
+!.vim/osc52.vim
 !.prettierrc
 !.tmux.conf
 !.sage
