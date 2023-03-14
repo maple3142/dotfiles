@@ -71,9 +71,10 @@ ZSH_DISABLE_COMPFIX="true"
 HIST_STAMPS="yyyy-mm-dd"
 HISTSIZE=500000
 SAVEHIST=500000
-WORDCHARS='*?_-.[]~&;!#$%^(){}<>'  # removed = and /
+WORDCHARS='*?_-.[]~&;!#$%^(){}<>|'  # removed = and / then add |
 zstyle ":completion:*" menu select
 setopt autocd
+setopt histignorespace
 unsetopt beep
 unsetopt nomatch
 
