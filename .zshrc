@@ -323,6 +323,13 @@ ncl() {
     kill -9 $!
 }
 
+copy() {
+    # copy with OSC 52 escape sequence
+    printf "\033]52;c;"
+    base64 -w 0
+    printf "\a"
+}
+
 # P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
