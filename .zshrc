@@ -64,7 +64,10 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # Set title
-echo -ne "\033]0;$USER@$HOST\007"
+__reset_title() {
+    echo -ne "\033]0;$USER@$HOST\007"
+}
+__reset_title
 
 # Zsh settings
 ZSH_DISABLE_COMPFIX="true"
@@ -255,10 +258,13 @@ if (( $+commands[bat] )) then
 	alias cat="bat -p"
 fi
 
-ssh(){
-	/usr/bin/ssh "$@"
-	echo -ne "\033]0;$USER@$HOST\007"
-}
+__fix_cmds=(ssh tmux)
+for cmd in $__fix_cmds; do
+    eval "$cmd() {
+        /usr/bin/$cmd \"\$@\"
+        __reset_title
+    }"
+done
 dl(){
     curl -LJO "$1"
 }
