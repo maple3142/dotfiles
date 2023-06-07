@@ -117,7 +117,7 @@ zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
 zinit lucid from"gh-r" as"program" for \
-    pick"jq-*" mv"jq-* -> jq" stedolan/jq \
+    pick"jq-*" mv"jq-* -> jq" jqlang/jq \
     pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
     pick"exa-linux-*" extract mv"*/exa -> exa" ogham/exa \
     pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat \
