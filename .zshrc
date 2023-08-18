@@ -158,7 +158,7 @@ fi
 zstyle ":completion:*:ssh:argument-1:*" tag-order hosts
 h=()
 if [[ -r ~/.ssh/config ]]; then
-  h=($h ${${${(@M)${(f)"$(cat ~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
+  h=($h ${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
 fi
 if [[ $#h -gt 0 ]]; then
   zstyle ":completion:*:ssh:*" hosts $h
