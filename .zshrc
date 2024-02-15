@@ -331,6 +331,35 @@ dotenv () {
     set +a
 }
 
+myip () {
+    method=$1
+    if [[ ! $# -eq 1 ]]; then
+        if (( $+commands[curl] )) then
+            method="ipinfo"
+        elif (( $+commands[bash] )) then
+            method="cf1"
+        elif (( $+commands[nc] )) then
+            method="cf2"
+        fi
+    fi
+    if [[ $method == "cf1" ]]; then
+        printf 'GET /cdn-cgi/trace HTTP/1.0\r\nHost: cloudflare.com\r\n\r\n' | nc 1.1.1.1 80 | sed -nE 's/ip=(.*)/\1/p'
+    elif [[ $method == "cf2" ]]; then
+        bash << EOF
+exec 3<>/dev/tcp/1.1.1.1/80
+printf 'GET /cdn-cgi/trace HTTP/1.0\r\nHost: cloudflare.com\r\n\r\n' >&3
+cat <&3 | sed -nE 's/ip=(.*)/\1/p'
+EOF
+    elif [[ $method == "ipinfo" ]]; then
+        curl -s 'https://ipinfo.io/ip'
+        printf '\n'
+    else
+        printf "Unknown ip query method: $method\n"
+        printf "Please choose one from cf1, cf2, ipinfo\n"
+        return 1
+    fi
+}
+
 # P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
