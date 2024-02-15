@@ -346,6 +346,17 @@ copy() {
     rm $f
 }
 
+msgpackd() {
+    python -c '__import__("pprint").pprint(__import__("msgpack").load(__import__("sys").stdin.buffer))'
+}
+
+dotenv () {
+    set -a
+    file=${1:-.env}
+    [ -f "$file" ] && source "$file"
+    set +a
+}
+
 # P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
