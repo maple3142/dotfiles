@@ -1,37 +1,11 @@
 #!/usr/bin/zsh
 # Start genie in WSL if exists
-if [[ -f ~/.subsystemctl_env ]]; then
-	source ~/.subsystemctl_env
-	rm ~/.subsystemctl_env
-	stty -echoprt # fix backspace
-fi
 if [[ -v WSL_DISTRO_NAME ]]; then
 	if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
 		WSLG_EXIST=1  # prefer wslg if it exists
-		if [[ ! -S /tmp/.X11-unix/X0 ]]; then
-			# fix wslg not working in subsystemctl namespace
-			# https://github.com/arkane-systems/genie/issues/175#issuecomment-922526126
-			ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix
-		fi
-	fi
-	if [[ "$(ps --no-headers -o comm 1)" != "systemd" ]] && (( $+commands[subsystemctl] )); then
-		if ! subsystemctl is-running; then
-			sudo subsystemctl start
-		fi
-		if ! subsystemctl is-inside; then
-			cat > ~/.subsystemctl_env << EOF
-export PATH="$PATH"
-export WSL_DISTRO_NAME="$WSL_DISTRO_NAME"
-export WSL_INTEROP="$WSL_INTEROP"
-export WSLENV="$WSLENV"
-export DISPLAY="$DISPLAY"
-export WAYLAND_DISPLAY="$WAYLAND_DISPLAY"
-export PULSE_SERVER="$PULSE_SERVER"
-cd "$PWD"
-EOF
-			exec subsystemctl shell --quiet
-			rm ~/.subsystemctl_env # should never reach here, but it is convenient for testing...
-		fi
+        if [[ ! -S /tmp/.X11-unix/X0 ]]; then
+            ln -sf /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/X0  # It isn't mounted correctly in WSL 2.0.14.0 for me ¯\_(ツ)_/¯
+        fi
 	fi
 fi
 
