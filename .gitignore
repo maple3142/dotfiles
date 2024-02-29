@@ -11,5 +11,6 @@
 !.sage
 !.sage/init.sage
 !.tool-versions
+!.asdfrc
 !setup.sh
 
