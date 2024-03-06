@@ -49,6 +49,7 @@ HIST_STAMPS="yyyy-mm-dd"
 HISTSIZE=500000
 SAVEHIST=500000
 WORDCHARS='*?_-.[]~&;!#$%^(){}<>|'  # removed = and / then add |
+ZLE_SPACE_SUFFIX_CHARS=$'|&-'
 zstyle ":completion:*" menu select
 setopt autocd
 setopt histignorespace
