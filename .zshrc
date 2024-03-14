@@ -2,7 +2,7 @@
 # Start genie in WSL if exists
 if [[ -v WSL_DISTRO_NAME ]]; then
 	if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
-		WSLG_EXIST=1  # prefer wslg if it exists
+		WSLG_EXIST=0  # prefer wslg if it exists
         if [[ ! -S /tmp/.X11-unix/X0 ]]; then
             ln -sf /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/X0  # It isn't mounted correctly in WSL 2.0.14.0 for me ¯\_(ツ)_/¯
         fi
@@ -14,6 +14,7 @@ export GPG_TTY=$(tty)
 
 # Setup ssh agent
 if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
+  [ ! -d $HOME/.ssh ] && mkdir -m 700 $HOME/.ssh
   export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
   ssh-add -l 2>/dev/null >/dev/null
   if [[ $? -ge 2 ]]; then
