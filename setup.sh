@@ -22,7 +22,11 @@ log "Copying dotfiles to home..."
 cp -a -rf -- .temphome/{.zshrc,.p10k.zsh,.vimrc,.prettierrc,.tmux.conf,.vim} .
 log "Removing .temphome..."
 rm -rf .temphome
-log "Changing shell to zsh..."
-chsh -s "$(which zsh)"
-log "All done! Restart your terminal or enter \`zsh\` to enjoy!"
-log "If it doesn't work, use chsh to manually change shell."
+log "Remember to use \`chsh -s $(which zsh)\` to change default shell"
+if [ -t 0 ]; then
+    log "Launching zsh..."
+    exec zsh
+else
+    log "Done! Please manually launch \`zsh\` to enjoy!"
+fi
+
