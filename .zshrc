@@ -279,7 +279,7 @@ if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+co
         tmux new -s "$sess" \
             "mitmweb --mode reverse:http://$host:$port -p $proxy_port --no-web-open-browser --web-port 4040"\; \
             split-window -v \
-            "cloudflared tunnel --protocol http2 --url http://localhost:$proxy_port run $CF_TUNNEL"\; \
+            "cloudflared tunnel --url http://localhost:$proxy_port run $CF_TUNNEL"\; \
             split-window -v \
             "zsh -c 'echo Press enter to stop; read; tmux kill-session'"\; \
             select-layout even-vertical
