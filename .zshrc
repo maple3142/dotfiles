@@ -95,7 +95,7 @@ zinit light romkatv/powerlevel10k
 zinit lucid from"gh-r" as"program" for \
     pick"jq-*" mv"jq-* -> jq" jqlang/jq \
     pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
-    pick"exa-linux-*" extract mv"*/exa -> exa" ogham/exa \
+    pick"eza-linux-*" extract mv"*/eza -> eza" eza-community/eza \
     pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat \
     pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd \
     pick"fzf-*linux_amd64-*" extract mv"fzf -> fzf" @junegunn/fzf
@@ -226,10 +226,10 @@ alias gp="git push"
 alias rg="rg --no-ignore-parent -M 200"
 alias fd="fd"
 
-if (( $+commands[exa] )) then
-	alias ls="exa"
-	alias ll="exa -l"
-	alias la="exa -la"
+if (( $+commands[eza] )) then
+	alias ls="eza"
+	alias ll="eza -l"
+	alias la="eza -la"
 fi
 if (( $+commands[bat] )) then
 	alias cat="bat -p"
