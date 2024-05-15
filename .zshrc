@@ -258,8 +258,9 @@ fi
 
 # Poor mans ngrok
 if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+commands[mitmweb] )) then
-    CF_TUNNEL=ctf
     tunnel() {
+        CF_TUNNEL=ctf  # leave blank if you want to use *.trycloudflare.com
+        TUNNEL_CMD=$([[ $CF_TUNNEL = "" ]] && echo "" || echo "run $CF_TUNNEL")
         if [[ $# -eq 1 ]]; then
             host='localhost'
             port=$1
@@ -279,7 +280,7 @@ if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+co
         tmux new -s "$sess" \
             "mitmweb --mode reverse:http://$host:$port -p $proxy_port --no-web-open-browser --web-port 4040"\; \
             split-window -v \
-            "cloudflared tunnel --url http://localhost:$proxy_port run $CF_TUNNEL"\; \
+            "cloudflared tunnel --url http://localhost:$proxy_port $TUNNEL_CMD"\; \
             split-window -v \
             "zsh -c 'echo Press enter to stop; read; tmux kill-session'"\; \
             select-layout even-vertical
