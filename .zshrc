@@ -115,7 +115,10 @@ export PATH=$HOME/.local/bin:"$PATH"
 if [[ -v WSL_DISTRO_NAME ]]; then
 	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
     export HOSTIP=$(ip route show default | awk '{print $3}')
-	alias ex=/mnt/c/Windows/explorer.exe
+	# alias ex=/mnt/c/Windows/explorer.exe
+    ex(){
+        /mnt/c/Windows/explorer.exe ${1//\//\\}  # replace / to \
+    }
 	alias clip=/mnt/c/Windows/System32/clip.exe
     alias wt="/mnt/c/Users/$USER/AppData/Local/Microsoft/WindowsApps/wt.exe"
 	alias code="'/mnt/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code/bin/code'"
