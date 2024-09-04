@@ -16,17 +16,12 @@ require zsh || exit $?
 require git || exit $?
 require unzip || exit $?
 cd ~ || { echo "Unable to cd ~"; exit 1; }
-log "Cloning dotfiles to .temphome..."
-git clone https://github.com/maple3142/dotfiles.git .temphome
-log "Copying dotfiles to home..."
-cp -a -rf -- .temphome/{.zshrc,.p10k.zsh,.vimrc,.prettierrc,.tmux.conf,.vim} .
-log "Removing .temphome..."
-rm -rf .temphome
+rm -rf .git
+log "Cloning dotfiles"
+git init
+git remote add origin https://github.com/maple3142/dotfiles.git
+git fetch origin
+git checkout -f -b master --track origin/master
 log "Remember to use \`chsh -s $(which zsh)\` to change default shell"
-if [ -t 0 ]; then
-    log "Launching zsh..."
-    exec zsh
-else
-    log "Done! Please manually launch \`zsh\` to enjoy!"
-fi
+log "Done! Please manually launch \`zsh\` to enjoy!"
 
