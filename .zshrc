@@ -1,4 +1,10 @@
 #!/usr/bin/zsh
+# XDG
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
 # Start genie in WSL if exists
 if [[ -v WSL_DISTRO_NAME ]]; then
 	if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
@@ -110,9 +116,6 @@ bashcompinit
 # Path
 export PATH="$(echo $PATH | sed 's/\/usr\/sbin://')"
 export PATH=$HOME/.local/bin:"$PATH"
-
-# XDG
-export XDG_CONFIG_HOME="$HOME/.config/"
 
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]]; then
