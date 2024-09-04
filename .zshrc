@@ -120,8 +120,13 @@ export PATH=$HOME/.local/bin:"$PATH"
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]]; then
 	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
-    export HOSTIP=$(ip route show default | awk '{print $3}')
-	# alias ex=/mnt/c/Windows/explorer.exe
+    if [[ $(wslinfo --networking-mode) == 'mirrored' ]]; then
+        # in mirrored, wsl connect connect to host services using 127.0.0.1
+        export HOSTIP=127.0.0.1
+    else
+        # assumed to be nat mode, the host is the router
+        export HOSTIP=$(ip route show default | awk '{print $3}')
+    fi
     ex(){
         /mnt/c/Windows/explorer.exe ${1//\//\\}  # replace / to \
     }
