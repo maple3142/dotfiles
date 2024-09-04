@@ -15,7 +15,6 @@ require(){
 }
 require zsh || exit $?
 require git || exit $?
-require unzip || exit $?
 cd ~ || { echo "Unable to cd ~"; exit 1; }
 rm -rf "$HOME/.cfg"
 log "Cloning dotfiles"
