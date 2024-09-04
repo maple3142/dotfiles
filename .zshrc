@@ -180,6 +180,7 @@ if [[ -d ~/.go ]]; then
 	export GOROOT="$HOME/.go"
 	export PATH="$GOROOT/bin:$PATH"
 fi
+export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 
 # Ruby bins
 if [[ -d ~/.gem/ruby/3.0.0/bin ]]; then
