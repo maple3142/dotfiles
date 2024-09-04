@@ -7,6 +7,9 @@ set t_u7= " Fix automatically entering replace mode in Windows Terminal
 set virtualedit=onemore
 set autoindent
 set incsearch
+set noeol
+set nofixeol
+set nofixendofline
 filetype plugin indent on
 " map Ctrl-C to yank 
 vmap <C-c> y 

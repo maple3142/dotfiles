@@ -111,6 +111,9 @@ bashcompinit
 export PATH="$(echo $PATH | sed 's/\/usr\/sbin://')"
 export PATH=$HOME/.local/bin:"$PATH"
 
+# XDG
+export XDG_CONFIG_HOME="$HOME/.config/"
+
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]]; then
 	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
