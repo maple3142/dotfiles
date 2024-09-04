@@ -232,6 +232,7 @@ fi
 alias ga="git add -A"
 alias gcm="git commit -m"
 alias gp="git push"
+alias gs="git status"
 alias rg="rg --no-ignore-parent -M 200"
 alias fd="fd"
 
@@ -240,6 +241,7 @@ alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias cfga='cfg add -A'
 alias cfgm='cfg commit -m'
 alias cfgp='cfg push'
+alias cfgs='cfg status'
 
 if (( $+commands[eza] )) then
 	alias ls="eza"
