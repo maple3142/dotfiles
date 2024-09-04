@@ -232,6 +232,12 @@ alias gp="git push"
 alias rg="rg --no-ignore-parent -M 200"
 alias fd="fd"
 
+# Home git management
+alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias cfga='cfg add -A'
+alias cfgm='cfg commit -m'
+alias cfgp='cfg push'
+
 if (( $+commands[eza] )) then
 	alias ls="eza"
 	alias ll="eza -l"

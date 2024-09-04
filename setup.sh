@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+shopt -s expand_aliases
 WHITE='\033[1;37m'
 LGREEN='\033[1;32m'
 CYAN='\033[0;36m'
@@ -16,12 +17,13 @@ require zsh || exit $?
 require git || exit $?
 require unzip || exit $?
 cd ~ || { echo "Unable to cd ~"; exit 1; }
-rm -rf .git
+rm -rf "$HOME/.cfg"
 log "Cloning dotfiles"
-git init
-git remote add origin https://github.com/maple3142/dotfiles.git
-git fetch origin
-git checkout -f -b master --track origin/master
+git init --bare "$HOME/.cfg"
+alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+cfg remote add origin https://github.com/maple3142/dotfiles.git
+cfg fetch origin
+cfg checkout -f -b master --track origin/master
 log "Remember to use \`chsh -s $(which zsh)\` to change default shell"
 log "Done! Please manually launch \`zsh\` to enjoy!"
 
