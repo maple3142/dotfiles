@@ -32,11 +32,6 @@ if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
   add_key_if_not_exist(){
 	  ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
   }
-  if [[ -a ~/.ssh/id_ed25519 ]]; then
-	  add_key_if_not_exist ~/.ssh/id_ed25519
-  elif [[ -a ~/.ssh/id_rsa ]]; then
-	  add_key_if_not_exist ~/.ssh/id_rsa
-  fi
 fi
 
 # Powerlevel10k Instant Prompt
