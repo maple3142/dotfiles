@@ -184,11 +184,6 @@ if [[ -d $GOPATH ]]; then
 fi
 export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 
-# Ruby bins
-if [[ -d ~/.gem/ruby/3.0.0/bin ]]; then
-	export PATH="$HOME/.gem/ruby/3.0.0/bin:$PATH"
-fi
-
 # Miniconda3
 if [[ -d ~/miniconda3 ]]; then
 	source ~/miniconda3/etc/profile.d/conda.sh
