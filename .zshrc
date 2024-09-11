@@ -29,7 +29,7 @@ if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
     fi
     ssh-agent -a $SSH_AUTH_SOCK >/dev/null
   fi
-  add_key_if_not_exist(){
+  add_key_if_not_exist() {
 	  ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
   }
 fi
@@ -122,7 +122,7 @@ if [[ -v WSL_DISTRO_NAME ]]; then
         # assumed to be nat mode, the host is the router
         export HOSTIP=$(ip route show default | awk '{print $3}')
     fi
-    ex(){
+    ex() {
         /mnt/c/Windows/explorer.exe ${1//\//\\}  # replace / to \
     }
 	alias clip=/mnt/c/Windows/System32/clip.exe
@@ -131,12 +131,6 @@ if [[ -v WSL_DISTRO_NAME ]]; then
 	if [[ "1" != "$WSLG_EXIST" ]]; then
 		export DISPLAY=$HOSTIP:0
 	fi
-	# Copy .ssh
-	upd_ssh(){
-		rm -rf ~/.ssh
-		/bin/cp -rf "/mnt/c/Users/$(whoami)/.ssh" ~/.ssh
-		chmod 600 ~/.ssh/*
-	}
 fi
 
 # Fix ssh autocomplete
@@ -230,19 +224,25 @@ if (( $+commands[kubectl] )) then
 fi
 
 # Aliases
-alias ga="git add -A"
+alias ga="git add -u"
+alias gaa="git add -A"
 alias gcm="git commit -m"
 alias gp="git push"
 alias gs="git status"
-alias rg="rg --no-ignore-parent -M 200"
-alias fd="fd"
+alias gd="git diff"
+alias gds="git diff --staged"
+alias rg="rg --no-ignore-vcs -M 200"
+alias fd="fd --no-ignore-vcs"
+alias dl="curl -LJO"
 
 # Home git management
 alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-alias cfga='cfg add -A'
-alias cfgm='cfg commit -m'
+alias cfga='cfg add -u'
+alias cfgcm='cfg commit -m'
 alias cfgp='cfg push'
 alias cfgs='cfg status'
+alias cfgd='cfg diff'
+alias cfgds='cfg diff --staged'
 
 if (( $+commands[eza] )) then
 	alias ls="eza"
@@ -250,21 +250,17 @@ if (( $+commands[eza] )) then
 	alias la="eza -la"
 fi
 if (( $+commands[bat] )) then
-	alias cat="bat -p"
+	alias cat="bat -pp"
 fi
 
-__fix_cmds=(ssh tmux)
-for cmd in $__fix_cmds; do
+for cmd in ssh tmux; do
     eval "$cmd() {
-        /usr/bin/$cmd \"\$@\"
+        command $cmd \"\$@\"
         __reset_title
     }"
 done
-dl(){
-    curl -LJO "$1"
-}
 if (( $+commands[rclone] )) then
-    rclone(){
+    rclone() {
         if [ -z "${RCLONE_CONFIG_PASS}" ]; then
             echo -n 'Enter Rclone config password: '
             read -s RCLONE_CONFIG_PASS && export RCLONE_CONFIG_PASS=$RCLONE_CONFIG_PASS
