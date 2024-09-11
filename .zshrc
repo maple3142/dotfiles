@@ -123,6 +123,7 @@ export PATH=$HOME/.local/bin:"$PATH"
 
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]]; then
+    export WINPATH=$(echo $PATH | tr ':' '\n' | grep '/mnt/c' | tr '\n' ':' | sed 's/.$//')
 	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
     if [[ $(wslinfo --networking-mode) == 'mirrored' ]]; then
         # in mirrored, wsl connect connect to host services using 127.0.0.1
@@ -132,11 +133,19 @@ if [[ -v WSL_DISTRO_NAME ]]; then
         export HOSTIP=$(ip route show default | awk '{print $3}')
     fi
     ex() {
-        /mnt/c/Windows/explorer.exe ${1//\//\\}  # replace / to \
+        /mnt/c/Windows/explorer.exe $(wslpath -w $1)
     }
-	alias clip=/mnt/c/Windows/System32/clip.exe
-    alias wt="/mnt/c/Users/$USER/AppData/Local/Microsoft/WindowsApps/wt.exe"
-	alias code="'/mnt/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code/bin/code'"
+    win() {
+        [[ $# -ge 1 ]] && PATH="$WINPATH:$PATH" "$@"
+    }
+    winpath() {
+        PATH="$WINPATH:$PATH" whence -p "$1"
+    }
+    clip() {
+        iconv -f UTF-8 -t UTF-16LE | /mnt/c/Windows/System32/clip.exe
+    }
+    codepath=$(winpath code)
+	alias code="'$codepath'"  # use single quote in case there are spaces in path
 	if [[ "1" != "$WSLG_EXIST" ]]; then
 		export DISPLAY=$HOSTIP:0
 	fi
