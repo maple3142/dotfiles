@@ -5,6 +5,8 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
+export RLWRAP_HOME="$XDG_DATA_HOME"/rlwrap
+
 # Start genie in WSL if exists
 if [[ -v WSL_DISTRO_NAME ]]; then
 	if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
