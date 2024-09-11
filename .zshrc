@@ -90,6 +90,13 @@ zinit wait lucid light-mode as'completion' atpull'zinit cclear' blockf for \
     zsh-users/zsh-completions \
     esc/conda-zsh-completion
 
+# use git completion from upstream
+gitver="v$(git version | cut -d' ' -f 3)"
+zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull"%atclone" for \
+    "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.bash"
+zinit wait lucid as"completion" atload"zicompinit; zicdreplay" mv"git-completion.zsh -> _git" for \
+    "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
+
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
