@@ -43,9 +43,11 @@ fi
 
 # Set title
 precmd() {
-    pwd=$(echo ${PWD/#$HOME/'~'} | sed -E 's|/(\.?)([^/])[^/]*|/\1\2|g')
+    cwd=${PWD/#$HOME/'~'}
+    c=$(printf $cwd | sed -E -e 's|/(\.?)([^/])[^/]*|/\1\2|g' -e 's|~$||' -e 's|/[^/]*$|/|')  # ~/.hidden/folder/apple/orange -> ~/.h/f/a/o -> ~/.h/f/a
+    c="$c${cwd##*/}"  # concat with basename
     u=${USER//maple3142/🍁}
-    printf "\033]0;$u@$HOST: $pwd\007"
+    printf "\033]0;$u@$HOST: $c\007"
 }
 
 # Zsh settings
