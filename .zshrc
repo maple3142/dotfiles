@@ -42,10 +42,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # Set title
-__reset_title() {
-    echo -ne "\033]0;$USER@$HOST\007"
+precmd() {
+    pwd=$(echo ${PWD/#$HOME/'~'} | sed -E 's|/(\.?)([^/])[^/]*|/\1\2|g')
+    u=${USER//maple3142/🍁}
+    printf "\033]0;$u@$HOST: $pwd\007"
 }
-__reset_title
 
 # Zsh settings
 ZSH_DISABLE_COMPFIX="true"
@@ -172,7 +173,7 @@ export EDITOR=vim
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
 
 # fzf
-export FZF_DEFAULT_COMMAND='fd'
+export FZF_DEFAULT_COMMAND='fd --no-ignore-vcs'
 
 # Python (Poetry)
 if [[ -d ~/.poetry ]]; then
@@ -180,11 +181,8 @@ if [[ -d ~/.poetry ]]; then
 fi
 
 # Rust (uses rustup)
-if [[ -d ~/.cargo/env ]]; then
+if [[ -a ~/.cargo/env ]]; then
     source ~/.cargo/env
-fi
-if [[ -d ~/.cargo/bin ]]; then
-    export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
 # Golang
@@ -229,11 +227,11 @@ ctf() {
 
 # CHROME_PATH
 if (( $+commands[chromium] )) then
-    export CHROME_PATH="$(which chromium)"
+    export CHROME_PATH="$(whence -p chromium)"
 fi
 
 # kubectl
-if (( $+commands[kubectl] )) then
+if (( $+commands[kubectl] )) && [[ ! -a $ZINIT_DIR/completions/_kubectl ]] then
     kubectl completion zsh > $ZINIT_DIR/completions/_kubectl
 fi
 
@@ -266,12 +264,7 @@ if (( $+commands[bat] )) then
     alias cat="bat -p"
 fi
 
-for cmd in ssh tmux; do
-    eval "$cmd() {
-        command $cmd \"\$@\"
-        __reset_title
-    }"
-done
+# Rclone remember password
 if (( $+commands[rclone] )) then
     rclone() {
         if [ -z "${RCLONE_CONFIG_PASS}" ]; then
