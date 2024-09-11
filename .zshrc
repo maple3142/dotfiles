@@ -235,7 +235,7 @@ alias fd="fd --no-ignore-vcs"
 alias dl="curl -LJO"
 
 # Home git management
-alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias cfg='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias cfga='cfg add'
 alias cfgcm='cfg commit -m'
 alias cfgp='cfg push'
