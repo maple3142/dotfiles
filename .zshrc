@@ -9,12 +9,12 @@ export RLWRAP_HOME="$XDG_DATA_HOME"/rlwrap
 
 # Start genie in WSL if exists
 if [[ -v WSL_DISTRO_NAME ]]; then
-	if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
-		WSLG_EXIST=0  # prefer wslg if it exists
+    if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
+        WSLG_EXIST=0  # prefer wslg if it exists
         if [[ ! -S /tmp/.X11-unix/X0 ]]; then
             ln -sf /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/X0  # It isn't mounted correctly in WSL 2.0.14.0 for me ¯\_(ツ)_/¯
         fi
-	fi
+    fi
 fi
 
 # GPG TTY
@@ -22,23 +22,23 @@ export GPG_TTY=$(tty)
 
 # Setup ssh agent
 if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
-  [ ! -d $HOME/.ssh ] && mkdir -m 700 $HOME/.ssh
-  export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
-  ssh-add -l 2>/dev/null >/dev/null
-  if [[ $? -ge 2 ]]; then
-    if [[ -a $SSH_AUTH_SOCK ]]; then
-      rm $SSH_AUTH_SOCK
+    [ ! -d $HOME/.ssh ] && mkdir -m 700 $HOME/.ssh
+    export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
+    ssh-add -l 2>/dev/null >/dev/null
+    if [[ $? -ge 2 ]]; then
+        if [[ -a $SSH_AUTH_SOCK ]]; then
+            rm $SSH_AUTH_SOCK
+        fi
+        ssh-agent -a $SSH_AUTH_SOCK >/dev/null
     fi
-    ssh-agent -a $SSH_AUTH_SOCK >/dev/null
-  fi
-  add_key_if_not_exist() {
-	  ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
-  }
+    add_key_if_not_exist() {
+        ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
+    }
 fi
 
 # Powerlevel10k Instant Prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # Set title
@@ -124,7 +124,7 @@ export PATH=$HOME/.local/bin:"$PATH"
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]]; then
     export WINPATH=$(echo $PATH | tr ':' '\n' | grep '/mnt/c' | tr '\n' ':' | sed 's/.$//')
-	export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
+    export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
     if [[ $(wslinfo --networking-mode) == 'mirrored' ]]; then
         # in mirrored, wsl connect connect to host services using 127.0.0.1
         export HOSTIP=127.0.0.1
@@ -145,21 +145,21 @@ if [[ -v WSL_DISTRO_NAME ]]; then
         iconv -f UTF-8 -t UTF-16LE | /mnt/c/Windows/System32/clip.exe
     }
     codepath=$(winpath code)
-	alias code="'$codepath'"  # use single quote in case there are spaces in path
-	if [[ "1" != "$WSLG_EXIST" ]]; then
-		export DISPLAY=$HOSTIP:0
-	fi
+    alias code="'$codepath'"  # use single quote in case there are spaces in path
+    if [[ "1" != "$WSLG_EXIST" ]]; then
+        export DISPLAY=$HOSTIP:0
+    fi
 fi
 
 # Fix ssh autocomplete
 zstyle ":completion:*:ssh:argument-1:*" tag-order hosts
 h=()
 if [[ -r ~/.ssh/config ]]; then
-  h=($h ${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
+    h=($h ${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
 fi
 if [[ $#h -gt 0 ]]; then
-  zstyle ":completion:*:ssh:*" hosts $h
-  zstyle ":completion:*:slogin:*" hosts $h
+    zstyle ":completion:*:ssh:*" hosts $h
+    zstyle ":completion:*:slogin:*" hosts $h
 fi
 
 # Lang
@@ -176,12 +176,12 @@ export FZF_DEFAULT_COMMAND='fd'
 
 # Python (Poetry)
 if [[ -d ~/.poetry ]]; then
-	export PATH="$HOME/.poetry/bin:$PATH"
+    export PATH="$HOME/.poetry/bin:$PATH"
 fi
 
 # Rust (uses rustup)
 if [[ -d ~/.cargo/env ]]; then
-	source ~/.cargo/env
+    source ~/.cargo/env
 fi
 if [[ -d ~/.cargo/bin ]]; then
     export PATH="$HOME/.cargo/bin:$PATH"
@@ -197,7 +197,7 @@ export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 
 # Miniconda3
 if [[ -d ~/miniconda3 ]]; then
-	source ~/miniconda3/etc/profile.d/conda.sh
+    source ~/miniconda3/etc/profile.d/conda.sh
 fi
 ctf() {
     # A fast but incomplete alternative to `conda activate ctf`
@@ -229,7 +229,7 @@ ctf() {
 
 # CHROME_PATH
 if (( $+commands[chromium] )) then
-	export CHROME_PATH="$(which chromium)"
+    export CHROME_PATH="$(which chromium)"
 fi
 
 # kubectl
@@ -258,12 +258,12 @@ alias cfgd='cfg diff'
 alias cfgds='cfg diff --staged'
 
 if (( $+commands[eza] )) then
-	alias ls="eza"
-	alias ll="eza -l"
-	alias la="eza -la"
+    alias ls="eza"
+    alias ll="eza -l"
+    alias la="eza -la"
 fi
 if (( $+commands[bat] )) then
-	alias cat="bat -p"
+    alias cat="bat -p"
 fi
 
 for cmd in ssh tmux; do
@@ -392,4 +392,3 @@ EOF
 
 # P10k Initialize
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
