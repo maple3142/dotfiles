@@ -263,7 +263,7 @@ if (( $+commands[eza] )) then
 	alias la="eza -la"
 fi
 if (( $+commands[bat] )) then
-	alias cat="bat -pp"
+	alias cat="bat -p"
 fi
 
 for cmd in ssh tmux; do
