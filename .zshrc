@@ -224,8 +224,7 @@ if (( $+commands[kubectl] )) then
 fi
 
 # Aliases
-alias ga="git add -u"
-alias gaa="git add -A"
+alias ga="git add"
 alias gcm="git commit -m"
 alias gp="git push"
 alias gs="git status"
@@ -237,7 +236,7 @@ alias dl="curl -LJO"
 
 # Home git management
 alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-alias cfga='cfg add -u'
+alias cfga='cfg add'
 alias cfgcm='cfg commit -m'
 alias cfgp='cfg push'
 alias cfgs='cfg status'
