@@ -177,9 +177,10 @@ if [[ -d ~/.cargo/bin ]]; then
 fi
 
 # Golang
-if [[ -d ~/.go ]]; then
-	export GOROOT="$HOME/.go"
-	export PATH="$GOROOT/bin:$PATH"
+export GOPATH="$XDG_DATA_HOME/go"
+export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
+if [[ -d $GOPATH ]]; then
+    export PATH="$GOPATH/bin:$PATH"
 fi
 export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 
