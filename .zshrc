@@ -32,9 +32,10 @@ zinit ice wait lucid multisrc'shell/{completion,key-bindings}.zsh' id-as'junegun
 zinit light junegunn/fzf
 
 zinit ice wait lucid blockf atload$'
-    zstyle \':fzf-tab:complete:(cd|z):*\' fzf-preview \'eza -1 --color=always $realpath\'
+    zstyle \':fzf-tab:complete:(cd|z|cat|bat|ls|eza|rg|fd|grep|vim|code):*\' fzf-preview \'if [[ -d $realpath ]]; then eza -1 --color=always $realpath; elif [[ -f $realpath ]]; then if $(file $realpath | grep -qe text); then head -c 1024 $realpath | bat -p -f --file-name $realpath; else file $realpath; fi; fi \'
+    zstyle \':fzf-tab:complete:*:options\' fzf-preview
+    zstyle \':fzf-tab:complete:*:argument-1\' fzf-preview
     zstyle \':completion:*\' menu select
-    zstyle \':fzf-tab:*\' fzf-command ftb-tmux-popup
 '
 zinit light Aloxaf/fzf-tab
 
@@ -133,7 +134,7 @@ if [[ -v WSL_DISTRO_NAME ]]; then
         /mnt/c/Windows/explorer.exe $(wslpath -w $1)
     }
     win() {
-        [[ $# -ge 1 ]] && PATH=$WINPATH:$PATH "$@"
+        [[ $# -ge 1 ]] && PATH=$WINPATH:$PATH $@
     }
     winpath() {
         PATH=$WINPATH:$PATH whence -p "$1"
@@ -141,7 +142,10 @@ if [[ -v WSL_DISTRO_NAME ]]; then
     clip() {
         iconv -f UTF-8 -t UTF-16LE | /mnt/c/Windows/System32/clip.exe
     }
-    alias code="'$(winpath code)'"  # use single quote in case there are spaces in path
+    __codepath=$(winpath code)
+    code() {
+        $__codepath $@
+    }
     if [[ $WSLG_EXIST != 1 ]]; then
         export DISPLAY=$HOSTIP:0
     fi
