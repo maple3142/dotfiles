@@ -116,6 +116,8 @@ zinit lucid from"gh-r" as"program" for \
 zinit ice wait lucid
 zinit light asdf-vm/asdf
 
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+
 # bashcompinit
 autoload bashcompinit
 bashcompinit
