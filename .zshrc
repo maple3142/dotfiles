@@ -172,7 +172,7 @@ export EDITOR=vim
 export MANPAGER='less -R --use-color -Dd+r -Du+b'
 
 # fzf
-export FZF_DEFAULT_COMMAND='fd --exclude .git --exclude .cfg'
+export FZF_DEFAULT_COMMAND='fd --exclude .git --exclude .cfg --ignore-file ~/.config/fzf_fdignore'
 
 # Python (Poetry)
 if [[ -d ~/.poetry ]]; then

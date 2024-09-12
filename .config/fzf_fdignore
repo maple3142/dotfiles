@@ -1,0 +1,7 @@
+.cfg
+__MACOSX
+miniconda3
+node_modules
+*.pyc
+__pycache__
+venv
