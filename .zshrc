@@ -1,4 +1,9 @@
 #!/usr/bin/zsh
+# Powerlevel10k Instant Prompt
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # XDG
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
@@ -6,62 +11,6 @@ export XDG_DATA_HOME=$HOME/.local/share
 export XDG_STATE_HOME=$HOME/.local/state
 
 export RLWRAP_HOME=$XDG_DATA_HOME/rlwrap
-
-# Start genie in WSL if exists
-if [[ -v WSL_DISTRO_NAME ]]; then
-    if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
-        WSLG_EXIST=0  # prefer wslg if it exists
-        if [[ ! -S /tmp/.X11-unix/X0 ]]; then
-            ln -sf /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/X0  # It isn't mounted correctly in WSL 2.0.14.0 for me ¯\_(ツ)_/¯
-        fi
-    fi
-fi
-
-# GPG TTY
-export GPG_TTY=$(tty)
-
-# Setup ssh agent
-if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
-    [ ! -d $HOME/.ssh ] && mkdir -m 700 $HOME/.ssh
-    export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
-    ssh-add -l 2>/dev/null >/dev/null
-    if [[ $? -ge 2 ]]; then
-        if [[ -a $SSH_AUTH_SOCK ]]; then
-            rm $SSH_AUTH_SOCK
-        fi
-        ssh-agent -a $SSH_AUTH_SOCK >/dev/null
-    fi
-    add_key_if_not_exist() {
-        ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
-    }
-fi
-
-# Powerlevel10k Instant Prompt
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-# Set title
-precmd() {
-    cwd=${PWD/#$HOME/'~'}
-    c=$(printf $cwd | sed -E -e 's|/(\.?)([^/])[^/]*|/\1\2|g' -e 's|~$||' -e 's|/[^/]*$|/|')  # ~/.hidden/folder/apple/orange -> ~/.h/f/a/o -> ~/.h/f/a
-    c=$c${cwd##*/}  # concat with basename
-    u=${USER//maple3142/🍁}
-    printf "\033]0;$u@$HOST: $c\007"
-}
-
-# Zsh settings
-ZSH_DISABLE_COMPFIX=true
-HIST_STAMPS=yyyy-mm-dd
-HISTSIZE=500000
-SAVEHIST=500000
-WORDCHARS='*?_-.[]~&;!#$%^(){}<>|'  # removed = and / then add |
-ZLE_SPACE_SUFFIX_CHARS='|&-'
-zstyle ':completion:*' menu select
-setopt autocd
-setopt histignorespace
-unsetopt beep
-unsetopt nomatch
 
 # ZInit
 ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
@@ -97,7 +46,7 @@ zinit wait lucid light-mode as'completion' atpull'zinit cclear' blockf for \
 
 # use git completion from upstream
 gitver="v${$(git version)##*version }"
-zinit wait silent lucid atclone'zstyle ':completion:*:*:git:*' script git-completion.bash' atpull'%atclone' for \
+zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull'%atclone' for \
     "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.bash"
 zinit wait lucid as'completion' atload'zicompinit; zicdreplay' mv'git-completion.zsh -> _git' for \
     "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
@@ -107,9 +56,9 @@ zinit lucid from'gh-r' as'program' for \
     pick'jq-*' mv'jq-* -> jq' jqlang/jq \
     pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep \
     pick'eza-linux-*' extract eza-community/eza \
-    pick'bat-linux-*' extract mv'*/bat -> bat' @sharkdp/bat \
-    pick'fd-*-linux-gnu-*' extract mv'*/fd -> fd' @sharkdp/fd \
-    pick'fzf-*linux_amd64-*' extract @junegunn/fzf
+    pick'bat-linux-*' extract mv'*/bat -> bat' sharkdp/bat \
+    pick'fd-*-linux-gnu-*' extract mv'*/fd -> fd' sharkdp/fd \
+    pick'fzf-*linux_amd64-*' extract junegunn/fzf
 
 zinit ice wait lucid
 zinit light asdf-vm/asdf
@@ -121,11 +70,57 @@ zinit light romkatv/powerlevel10k
 autoload bashcompinit
 bashcompinit
 
+# GPG TTY
+export GPG_TTY=$(tty)
+
+# Setup ssh agent
+if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
+    [ ! -d $HOME/.ssh ] && mkdir -m 700 $HOME/.ssh
+    export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
+    ssh-add -l 2>/dev/null >/dev/null
+    if [[ $? -ge 2 ]]; then
+        if [[ -a $SSH_AUTH_SOCK ]]; then
+            rm $SSH_AUTH_SOCK
+        fi
+        ssh-agent -a $SSH_AUTH_SOCK >/dev/null
+    fi
+    # need to have `AddKeysToAgent yes` in ~/.ssh/config
+    add_key_if_not_exist() {
+        ssh-add -l | grep "$(ssh-keygen -lf $1 | head -c 20)" -q || ssh-add $1 2>/dev/null
+    }
+fi
+
+# Set title
+precmd() {
+    cwd=${PWD/#$HOME/'~'}
+    c=$(printf $cwd | sed -E -e 's|/(\.?)([^/])[^/]*|/\1\2|g' -e 's|~$||' -e 's|/[^/]*$|/|')  # ~/.hidden/folder/apple/orange -> ~/.h/f/a/o -> ~/.h/f/a
+    c=$c${cwd##*/}  # concat with basename
+    u=${USER//maple3142/🍁}
+    printf "\033]0;$u@$HOST: $c\007"
+}
+
+# Zsh settings
+ZSH_DISABLE_COMPFIX=true
+HIST_STAMPS=yyyy-mm-dd
+HISTSIZE=500000
+SAVEHIST=500000
+WORDCHARS='*?_-.[]~&;!#$%^(){}<>|'  # removed = and / then add |
+ZLE_SPACE_SUFFIX_CHARS='|&-'
+zstyle ':completion:*' menu select
+setopt autocd
+setopt histignorespace
+unsetopt beep
+unsetopt nomatch
+
 # Path
 export PATH=$HOME/.local/bin:$PATH
 
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]]; then
+    # if wslg exists
+    if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
+        WSLG_EXIST=0  # 1 means prefer wslg if it exists
+    fi
     export WINPATH=$(echo $PATH | tr ':' '\n' | grep '/mnt/c' | tr '\n' ':' | sed 's/.$//')
     export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
     if [[ $(wslinfo --networking-mode) == mirrored ]]; then
@@ -162,8 +157,7 @@ if [[ -r ~/.ssh/config ]]; then
     h=($h ${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
 fi
 if [[ $#h -gt 0 ]]; then
-    zstyle ':completion:*:ssh:*' hosts $h
-    zstyle ':completion:*:slogin:*' hosts $h
+    zstyle ':completion:*:(ssh|scp|sftp|rsh|rsync):*' hosts $h
 fi
 unset h
 
