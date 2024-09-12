@@ -1,11 +1,11 @@
 #!/usr/bin/zsh
 # XDG
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_STATE_HOME=$HOME/.local/state
 
-export RLWRAP_HOME="$XDG_DATA_HOME"/rlwrap
+export RLWRAP_HOME=$XDG_DATA_HOME/rlwrap
 
 # Start genie in WSL if exists
 if [[ -v WSL_DISTRO_NAME ]]; then
@@ -45,30 +45,30 @@ fi
 precmd() {
     cwd=${PWD/#$HOME/'~'}
     c=$(printf $cwd | sed -E -e 's|/(\.?)([^/])[^/]*|/\1\2|g' -e 's|~$||' -e 's|/[^/]*$|/|')  # ~/.hidden/folder/apple/orange -> ~/.h/f/a/o -> ~/.h/f/a
-    c="$c${cwd##*/}"  # concat with basename
+    c=$c${cwd##*/}  # concat with basename
     u=${USER//maple3142/🍁}
     printf "\033]0;$u@$HOST: $c\007"
 }
 
 # Zsh settings
-ZSH_DISABLE_COMPFIX="true"
-HIST_STAMPS="yyyy-mm-dd"
+ZSH_DISABLE_COMPFIX=true
+HIST_STAMPS=yyyy-mm-dd
 HISTSIZE=500000
 SAVEHIST=500000
 WORDCHARS='*?_-.[]~&;!#$%^(){}<>|'  # removed = and / then add |
-ZLE_SPACE_SUFFIX_CHARS=$'|&-'
-zstyle ":completion:*" menu select
+ZLE_SPACE_SUFFIX_CHARS='|&-'
+zstyle ':completion:*' menu select
 setopt autocd
 setopt histignorespace
 unsetopt beep
 unsetopt nomatch
 
 # ZInit
-ZINIT_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit"
-ZINIT_HOME="$ZINIT_DIR/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-source "${ZINIT_HOME}/zinit.zsh"
+ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
+ZINIT_HOME=$ZINIT_DIR/zinit.git
+[ ! -d $ZINIT_HOME ] && mkdir -p $ZINIT_DIR
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
+source ${ZINIT_HOME}/zinit.zsh
 
 zinit lucid light-mode for \
     OMZL::history.zsh \
@@ -96,19 +96,20 @@ zinit wait lucid light-mode as'completion' atpull'zinit cclear' blockf for \
     esc/conda-zsh-completion
 
 # use git completion from upstream
-gitver="v$(git version | cut -d' ' -f 3)"
-zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull"%atclone" for \
+gitver="v${$(git version)##*version }"
+zinit wait silent lucid atclone'zstyle ':completion:*:*:git:*' script git-completion.bash' atpull'%atclone' for \
     "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.bash"
-zinit wait lucid as"completion" atload"zicompinit; zicdreplay" mv"git-completion.zsh -> _git" for \
+zinit wait lucid as'completion' atload'zicompinit; zicdreplay' mv'git-completion.zsh -> _git' for \
     "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
+unset gitver
 
-zinit lucid from"gh-r" as"program" for \
-    pick"jq-*" mv"jq-* -> jq" jqlang/jq \
-    pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
-    pick"eza-linux-*" extract eza-community/eza \
-    pick"bat-linux-*" extract mv"*/bat -> bat" @sharkdp/bat \
-    pick"fd-*-linux-gnu-*" extract mv"*/fd -> fd" @sharkdp/fd \
-    pick"fzf-*linux_amd64-*" extract @junegunn/fzf
+zinit lucid from'gh-r' as'program' for \
+    pick'jq-*' mv'jq-* -> jq' jqlang/jq \
+    pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep \
+    pick'eza-linux-*' extract eza-community/eza \
+    pick'bat-linux-*' extract mv'*/bat -> bat' @sharkdp/bat \
+    pick'fd-*-linux-gnu-*' extract mv'*/fd -> fd' @sharkdp/fd \
+    pick'fzf-*linux_amd64-*' extract @junegunn/fzf
 
 zinit ice wait lucid
 zinit light asdf-vm/asdf
@@ -121,49 +122,50 @@ autoload bashcompinit
 bashcompinit
 
 # Path
-export PATH="$(echo $PATH | sed 's/\/usr\/sbin://')"
-export PATH=$HOME/.local/bin:"$PATH"
+export PATH=$HOME/.local/bin:$PATH
 
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]]; then
     export WINPATH=$(echo $PATH | tr ':' '\n' | grep '/mnt/c' | tr '\n' ':' | sed 's/.$//')
     export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
-    if [[ $(wslinfo --networking-mode) == 'mirrored' ]]; then
+    if [[ $(wslinfo --networking-mode) == mirrored ]]; then
         # in mirrored, wsl connect connect to host services using 127.0.0.1
         export HOSTIP=127.0.0.1
     else
         # assumed to be nat mode, the host is the router
-        export HOSTIP=$(ip route show default | awk '{print $3}')
+        arr=($(ip route show default))
+        export HOSTIP=$arr[3]
+        unset arr
     fi
     ex() {
         /mnt/c/Windows/explorer.exe $(wslpath -w $1)
     }
     win() {
-        [[ $# -ge 1 ]] && PATH="$WINPATH:$PATH" "$@"
+        [[ $# -ge 1 ]] && PATH=$WINPATH:$PATH "$@"
     }
     winpath() {
-        PATH="$WINPATH:$PATH" whence -p "$1"
+        PATH=$WINPATH:$PATH whence -p "$1"
     }
     clip() {
         iconv -f UTF-8 -t UTF-16LE | /mnt/c/Windows/System32/clip.exe
     }
-    codepath=$(winpath code)
-    alias code="'$codepath'"  # use single quote in case there are spaces in path
-    if [[ "1" != "$WSLG_EXIST" ]]; then
+    alias code="'$(winpath code)'"  # use single quote in case there are spaces in path
+    if [[ $WSLG_EXIST != 1 ]]; then
         export DISPLAY=$HOSTIP:0
     fi
 fi
 
 # Fix ssh autocomplete
-zstyle ":completion:*:ssh:argument-1:*" tag-order hosts
+zstyle ':completion:*:ssh:argument-1:*' tag-order hosts
 h=()
 if [[ -r ~/.ssh/config ]]; then
     h=($h ${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
 fi
 if [[ $#h -gt 0 ]]; then
-    zstyle ":completion:*:ssh:*" hosts $h
-    zstyle ":completion:*:slogin:*" hosts $h
+    zstyle ':completion:*:ssh:*' hosts $h
+    zstyle ':completion:*:slogin:*' hosts $h
 fi
+unset h
 
 # Lang
 export LANG=en_US.UTF-8
@@ -172,14 +174,14 @@ export LANG=en_US.UTF-8
 export EDITOR=vim
 
 # Colored Man Page
-export MANPAGER="less -R --use-color -Dd+r -Du+b"
+export MANPAGER='less -R --use-color -Dd+r -Du+b'
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --no-ignore-vcs'
 
 # Python (Poetry)
 if [[ -d ~/.poetry ]]; then
-    export PATH="$HOME/.poetry/bin:$PATH"
+    export PATH=$HOME/.poetry/bin:$PATH
 fi
 
 # Rust (uses rustup)
@@ -188,10 +190,10 @@ if [[ -a ~/.cargo/env ]]; then
 fi
 
 # Golang
-export GOPATH="$XDG_DATA_HOME/go"
-export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
+export GOPATH=$XDG_DATA_HOME/go
+export GOMODCACHE=$XDG_CACHE_HOME/go/mod
 if [[ -d $GOPATH ]]; then
-    export PATH="$GOPATH/bin:$PATH"
+    export PATH=$GOPATH/bin:$PATH
 fi
 export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 
@@ -201,9 +203,9 @@ if [[ -d ~/miniconda3 ]]; then
 fi
 ctf() {
     # A fast but incomplete alternative to `conda activate ctf`
-    _ENV="ctf"
-    _PREFIX="$HOME/miniconda3/envs/$_ENV"
-    _BINDIR="$_PREFIX/bin"
+    _ENV=ctf
+    _PREFIX=$HOME/miniconda3/envs/$_ENV
+    _BINDIR=$_PREFIX/bin
     if [[ -v SIMPLE_CONDA ]]; then
         export PATH=$(echo $PATH | sed "s|$_BINDIR||g")
         unset CONDA_PREFIX
@@ -214,22 +216,22 @@ ctf() {
         unset -f orig_conda
     else
         if [[ -v CONDA_PREFIX ]]; then
-            echo "Please deactivate official conda first"
+            echo 'Please deactivate official conda first'
         else
-            export PATH="$_BINDIR:$PATH"
+            export PATH=$_BINDIR:$PATH
             export CONDA_PREFIX=$_PREFIX
             export CONDA_DEFAULT_ENV=$_ENV
             export CONDA_PROMPT_MODIFIER="($_ENV)"
             export SIMPLE_CONDA=1
             functions[orig_conda]=$functions[conda]
-            conda() { echo "Please deactivate custom conda first" }
+            conda() { echo 'Please deactivate custom conda first' }
         fi
     fi
 }
 
 # CHROME_PATH
 if (( $+commands[chromium] )) then
-    export CHROME_PATH="$(whence -p chromium)"
+    export CHROME_PATH=$(whence -p chromium)
 fi
 
 # kubectl
@@ -238,15 +240,15 @@ if (( $+commands[kubectl] )) && [[ ! -a $ZINIT_DIR/completions/_kubectl ]] then
 fi
 
 # Aliases
-alias ga="git add"
-alias gcm="git commit -m"
-alias gp="git push"
-alias gs="git status"
-alias gd="git diff"
-alias gds="git diff --staged"
-alias rg="rg --no-ignore-vcs -M 200"
-alias fd="fd --no-ignore-vcs"
-alias dl="curl -LJO"
+alias ga='git add'
+alias gcm='git commit -m'
+alias gp='git push'
+alias gs='git status'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias rg='rg --no-ignore-vcs -M 200'
+alias fd='fd --no-ignore-vcs'
+alias dl='curl -LJO'
 
 # Home git management
 alias cfg='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
@@ -258,12 +260,12 @@ alias cfgd='cfg diff'
 alias cfgds='cfg diff --staged'
 
 if (( $+commands[eza] )) then
-    alias ls="eza"
-    alias ll="eza -l"
-    alias la="eza -la"
+    alias ls='eza'
+    alias ll='eza -l'
+    alias la='eza -la'
 fi
 if (( $+commands[bat] )) then
-    alias cat="bat -p"
+    alias cat='bat -p'
 fi
 
 # Rclone remember password
@@ -284,7 +286,7 @@ if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+co
         CF_TUNNEL=ctf  # leave blank if you want to use *.trycloudflare.com
         TUNNEL_CMD=$([[ $CF_TUNNEL = "" ]] && echo "" || echo "run $CF_TUNNEL")
         if [[ $# -eq 1 ]]; then
-            host='localhost'
+            host=localhost
             port=$1
         elif [[ $# -eq 2 ]]; then
             host=$1
@@ -329,19 +331,19 @@ copy() {
     # tmux and screen bypass from https://github.com/rumpelsepp/oscclip/
     f=$(mktemp)
     if [[ ! -z $TMUX ]]; then
-        printf "\033Ptmux;\033" >> $f
+        printf '\033Ptmux;\033' >> $f
     elif [[ $TERM =~ ^screen ]]; then
-        printf "\033P" >> $f
+        printf '\033P' >> $f
     fi
-    printf "\e]52;c;" >> $f
+    printf '\e]52;c;' >> $f
     base64 -w 0 >> $f
-    printf "\a" >> $f
+    printf '\a' >> $f
     if [[ ! -z $TMUX ]]; then
-        printf "\033\\" >> $f
+        printf '\033\' >> $f
     elif [[ $TERM =~ ^screen ]]; then
-        printf "\033\\" >> $f
+        printf '\033\' >> $f
     fi
-    \cat $f
+    <$f
     rm $f
 }
 
@@ -360,22 +362,22 @@ myip () {
     method=$1
     if [[ ! $# -eq 1 ]]; then
         if (( $+commands[curl] )) then
-            method="ipinfo"
+            method=ipinfo
         elif (( $+commands[bash] )) then
-            method="cf1"
+            method=cf1
         elif (( $+commands[nc] )) then
-            method="cf2"
+            method=cf2
         fi
     fi
-    if [[ $method == "cf1" ]]; then
+    if [[ $method == cf1 ]]; then
         printf 'GET /cdn-cgi/trace HTTP/1.0\r\nHost: cloudflare.com\r\n\r\n' | nc 1.1.1.1 80 | sed -nE 's/ip=(.*)/\1/p'
-    elif [[ $method == "cf2" ]]; then
+    elif [[ $method == cf2 ]]; then
         bash << EOF
 exec 3<>/dev/tcp/1.1.1.1/80
 printf 'GET /cdn-cgi/trace HTTP/1.0\r\nHost: cloudflare.com\r\n\r\n' >&3
 cat <&3 | sed -nE 's/ip=(.*)/\1/p'
 EOF
-    elif [[ $method == "ipinfo" ]]; then
+    elif [[ $method == ipinfo ]]; then
         curl -s 'https://ipinfo.io/ip'
         printf '\n'
     else
