@@ -19,8 +19,9 @@ ZINIT_HOME=$ZINIT_DIR/zinit.git
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
 source ${ZINIT_HOME}/zinit.zsh
 
+zinit snippet OMZL::history.zsh  # turbo would make auto-auggestions not work at start
+
 zinit wait lucid light-mode for \
-    OMZL::history.zsh \
     OMZL::key-bindings.zsh \
     OMZP::sudo/sudo.plugin.zsh
 
