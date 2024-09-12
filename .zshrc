@@ -31,7 +31,11 @@ zinit light romkatv/powerlevel10k
 zinit ice wait lucid multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
 zinit light junegunn/fzf
 
-zinit ice wait lucid blockf
+zinit ice wait lucid blockf atload$'
+    zstyle \':fzf-tab:complete:(cd|z):*\' fzf-preview \'eza -1 --color=always $realpath\'
+    zstyle \':completion:*\' menu select
+    zstyle \':fzf-tab:*\' fzf-command ftb-tmux-popup
+'
 zinit light Aloxaf/fzf-tab
 
 # use git completion from upstream
@@ -42,7 +46,7 @@ zinit wait lucid as'completion' mv'git-completion.zsh -> _git' for \
     "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
 unset gitver
 
-zinit wait lucid from'gh-r' as'program' for \
+zinit from'gh-r' as'program' for \
     pick'jq-*' mv'jq-* -> jq' jqlang/jq \
     pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep \
     pick'eza-linux-*' extract eza-community/eza \
@@ -164,7 +168,9 @@ export EDITOR=vim
 export MANPAGER='less -R --use-color -Dd+r -Du+b'
 
 # fzf
-export FZF_DEFAULT_COMMAND='fd --exclude .git --exclude .cfg --ignore-file ~/.config/fzf_fdignore'
+export FZF_DEFAULT_COMMAND='fd --type f --exclude .git --exclude .cfg --ignore-file ~/.config/fzf_fdignore'
+export FZF_CTRL_T_COMMAND='fd --exclude .git --exclude .cfg --ignore-file ~/.config/fzf_fdignore'
+export FZF_ALT_C_COMMAND='fd --type d --exclude .git --exclude .cfg --ignore-file ~/.config/fzf_fdignore'
 
 # Python (Poetry)
 if [[ -d ~/.poetry ]]; then
