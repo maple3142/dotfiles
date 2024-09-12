@@ -47,8 +47,9 @@ zinit wait lucid from'gh-r' as'program' for \
     pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep \
     pick'eza-linux-*' extract eza-community/eza \
     pick'bat-*-linux-*' extract mv'*/bat -> bat' @sharkdp/bat \
-    pick'fd-*-linux-*' extract mv'*/fd -> fd' @sharkdp/fd \
-    pick'fzf-*linux-*' extract junegunn/fzf
+    pick'fd-*-linux-*' extract mv'*/fd -> fd' pick'fd' @sharkdp/fd \
+    pick'fzf-*-linux-*' extract mv'*/fzf -> fzf' junegunn/fzf \
+    pick'zoxide-*-linux-*' extract atclone'./zoxide init zsh > .zoxide.zsh' atpull'%atclone' src'.zoxide.zsh' compile'.zoxide.zsh' atload'unalias zi' ajeetdsouza/zoxide \
 
 zinit ice wait lucid
 zinit light asdf-vm/asdf
