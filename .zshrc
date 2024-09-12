@@ -19,41 +19,30 @@ ZINIT_HOME=$ZINIT_DIR/zinit.git
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
 source ${ZINIT_HOME}/zinit.zsh
 
-zinit snippet OMZL::history.zsh  # turbo would make auto-auggestions not work at start
+zinit snippet OMZL::history.zsh  # turbo mode would make auto-auggestions not work at start
 
 zinit wait lucid light-mode for \
     OMZL::key-bindings.zsh \
     OMZP::sudo/sudo.plugin.zsh
 
+zinit ice depth=1  # powerlevel10k does not support turbo mode
+zinit light romkatv/powerlevel10k
+
 zinit ice wait lucid multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
 zinit light junegunn/fzf
 
-zinit ice wait light-mode lucid blockf compile'lib/*f*~*.zwc'
+zinit ice wait lucid blockf
 zinit light Aloxaf/fzf-tab
-
-zinit wait lucid light-mode for \
-    atload'bindkey "^[[A" history-substring-search-up; bindkey "^[[B" history-substring-search-down' \
-        zsh-users/zsh-history-substring-search \
-    atinit'zicompinit; zicdreplay' atload'FAST_HIGHLIGHT[chroma-man]=' \
-    atclone'(){local f;cd -q →*;for f (*~*.zwc){zcompile -Uz -- ${f}};}' \
-    compile'.*fast*~*.zwc' nocompletions atpull'%atclone' \
-        zdharma-continuum/fast-syntax-highlighting \
-    atload'_zsh_autosuggest_start' \
-        zsh-users/zsh-autosuggestions
-
-zinit wait lucid light-mode as'completion' atpull'zinit cclear' blockf for \
-    zsh-users/zsh-completions \
-    esc/conda-zsh-completion
 
 # use git completion from upstream
 gitver="v${$(git version)##*version }"
 zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull'%atclone' for \
     "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.bash"
-zinit wait lucid as'completion' atload'zicompinit; zicdreplay' mv'git-completion.zsh -> _git' for \
+zinit wait lucid as'completion' mv'git-completion.zsh -> _git' for \
     "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
 unset gitver
 
-zinit lucid from'gh-r' as'program' for \
+zinit wait lucid from'gh-r' as'program' for \
     pick'jq-*' mv'jq-* -> jq' jqlang/jq \
     pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep \
     pick'eza-linux-*' extract eza-community/eza \
@@ -64,12 +53,14 @@ zinit lucid from'gh-r' as'program' for \
 zinit ice wait lucid
 zinit light asdf-vm/asdf
 
-zinit ice depth=1
-zinit light romkatv/powerlevel10k
-
-# bashcompinit
-autoload bashcompinit
-bashcompinit
+zinit wait lucid light-mode for \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" atload'FAST_HIGHLIGHT[chroma-man]=' \
+        zdharma-continuum/fast-syntax-highlighting \
+    atload"_zsh_autosuggest_start" \
+        zsh-users/zsh-autosuggestions \
+    as'completion' blockf \
+        zsh-users/zsh-completions \
+        esc/conda-zsh-completion
 
 # GPG TTY
 export GPG_TTY=$(tty)
@@ -227,11 +218,6 @@ ctf() {
 # CHROME_PATH
 if (( $+commands[chromium] )) then
     export CHROME_PATH=$(whence -p chromium)
-fi
-
-# kubectl
-if (( $+commands[kubectl] )) && [[ ! -a $ZINIT_DIR/completions/_kubectl ]] then
-    kubectl completion zsh > $ZINIT_DIR/completions/_kubectl
 fi
 
 # Aliases
