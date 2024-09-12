@@ -19,7 +19,7 @@ ZINIT_HOME=$ZINIT_DIR/zinit.git
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
 source ${ZINIT_HOME}/zinit.zsh
 
-zinit lucid light-mode for \
+zinit wait lucid light-mode for \
     OMZL::history.zsh \
     OMZL::key-bindings.zsh \
     OMZP::sudo/sudo.plugin.zsh
