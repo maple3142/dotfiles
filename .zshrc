@@ -102,9 +102,6 @@ zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-comple
 zinit wait lucid as"completion" atload"zicompinit; zicdreplay" mv"git-completion.zsh -> _git" for \
     "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
 
-zinit ice depth=1
-zinit light romkatv/powerlevel10k
-
 zinit lucid from"gh-r" as"program" for \
     pick"jq-*" mv"jq-* -> jq" jqlang/jq \
     pick"ripgrep-*-linux-*" extract mv"*/rg -> rg" BurntSushi/ripgrep \
@@ -116,7 +113,8 @@ zinit lucid from"gh-r" as"program" for \
 zinit ice wait lucid
 zinit light asdf-vm/asdf
 
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
 
 # bashcompinit
 autoload bashcompinit
