@@ -56,9 +56,9 @@ zinit lucid from'gh-r' as'program' for \
     pick'jq-*' mv'jq-* -> jq' jqlang/jq \
     pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep \
     pick'eza-linux-*' extract eza-community/eza \
-    pick'bat-linux-*' extract mv'*/bat -> bat' sharkdp/bat \
-    pick'fd-*-linux-gnu-*' extract mv'*/fd -> fd' sharkdp/fd \
-    pick'fzf-*linux_amd64-*' extract junegunn/fzf
+    pick'bat-*-linux-*' extract mv'*/bat -> bat' @sharkdp/bat \
+    pick'fd-*-linux-*' extract mv'*/fd -> fd' @sharkdp/fd \
+    pick'fzf-*linux-*' extract junegunn/fzf
 
 zinit ice wait lucid
 zinit light asdf-vm/asdf
