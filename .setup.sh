@@ -22,6 +22,7 @@ git init --bare "$HOME/.cfg"
 alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 cfg config core.excludesfile .cfgignore
 cfg config status.showUntrackedFiles no
+cfg config pull.ff only
 cfg remote add origin https://github.com/maple3142/dotfiles.git
 cfg fetch origin
 cfg checkout -f -b master --track origin/master
