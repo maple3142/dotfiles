@@ -54,7 +54,7 @@ zinit from'gh-r' as'program' for \
     pick'bat-*-linux-*' extract mv'*/bat -> bat' @sharkdp/bat \
     pick'fd-*-linux-*' extract mv'*/fd -> fd' pick'fd' @sharkdp/fd \
     pick'fzf-*-linux-*' extract mv'*/fzf -> fzf' junegunn/fzf \
-    pick'zoxide-*-linux-*' extract atclone'./zoxide init zsh > .zoxide.zsh' atpull'%atclone' src'.zoxide.zsh' compile'.zoxide.zsh' atload'unalias zi' ajeetdsouza/zoxide \
+    pick'zoxide-*-linux-*' extract atclone'./zoxide init zsh > .zoxide.zsh' atpull'%atclone' src'.zoxide.zsh' atload'alias cd=z' compile'.zoxide.zsh' atload'unalias zi' ajeetdsouza/zoxide \
 
 zinit ice wait lucid
 zinit light asdf-vm/asdf
