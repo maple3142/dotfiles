@@ -111,6 +111,7 @@ unsetopt beep
 unsetopt nomatch
 
 # Path
+export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/sbin' | tr '\n' ':' | sed 's/.$//')
 export PATH=$HOME/.local/bin:$PATH
 
 # WSL specific
