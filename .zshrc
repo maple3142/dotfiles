@@ -192,7 +192,7 @@ export GOMODCACHE=$XDG_CACHE_HOME/go/mod
 if [[ -d $GOPATH ]]; then
     export PATH=$GOPATH/bin:$PATH
 fi
-export ASDF_GOLANG_MOD_VERSION_ENABLED=true
+export ASDF_GOLANG_MOD_VERSION_ENABLED=false
 
 # Miniconda3
 if [[ -d ~/miniconda3 ]]; then
