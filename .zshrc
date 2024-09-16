@@ -178,6 +178,10 @@ setopt histignorespace
 unsetopt beep
 unsetopt nomatch
 
+# Home & End key
+bindkey  "^[[H"   beginning-of-line
+bindkey  "^[[F"   end-of-line
+
 # Fix ssh autocomplete
 () {
     zstyle ':completion:*:ssh:argument-1:*' tag-order hosts
