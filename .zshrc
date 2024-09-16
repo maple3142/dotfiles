@@ -12,6 +12,53 @@ export XDG_STATE_HOME=$HOME/.local/state
 
 export RLWRAP_HOME=$XDG_DATA_HOME/rlwrap
 
+# Path
+if [[ $UID != 0 ]]; then
+    export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/sbin' | tr '\n' ':' | sed 's/.$//')
+fi
+if [[ -d ~/.local/bin ]]; then
+    export PATH=$HOME/.local/bin:$PATH
+fi
+
+# WSL specific
+if [[ -v WSL_DISTRO_NAME ]]; then
+    export WINPATH=$(echo $PATH | tr ':' '\n' | grep '/mnt/c' | tr '\n' ':' | sed 's/.$//')
+    export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
+    if [[ $(wslinfo --networking-mode) == mirrored ]]; then
+        # in mirrored, wsl connect connect to host services using 127.0.0.1
+        export HOSTIP=127.0.0.1
+    else
+        # assumed to be nat mode, the host is the router
+        () {
+            arr=($(ip route show default))
+            export HOSTIP=$arr[3]
+        }
+    fi
+    ex() {
+        /mnt/c/Windows/explorer.exe $(wslpath -w $1)
+    }
+    win() {
+        PATH=$WINPATH:$PATH $@
+    }
+    winpath() {
+        PATH=$WINPATH:$PATH whence -p "$1"
+    }
+    clip() {
+        iconv -f UTF-8 -t UTF-16LE | /mnt/c/Windows/System32/clip.exe
+    }
+    () {
+        # special vscode fast path, as win function is slow
+        local codepath=$(winpath code)
+        eval "code() { '$codepath' \$@ }"
+    }
+    PREFER_X11=${PREFER_X11:-0}
+    if [[ ! -S /tmp/.X11-unix/X0 ]] || [[ $PREFER_X11 == 1 ]]; then
+        export DISPLAY=$HOSTIP:0
+    else
+        export DISPLAY=:0
+    fi
+fi
+
 # ZInit
 ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
 ZINIT_HOME=$ZINIT_DIR/zinit.git
@@ -111,50 +158,6 @@ setopt histignorespace
 unsetopt beep
 unsetopt nomatch
 
-# Path
-export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/sbin' | tr '\n' ':' | sed 's/.$//')
-export PATH=$HOME/.local/bin:$PATH
-
-# WSL specific
-if [[ -v WSL_DISTRO_NAME ]]; then
-    # if wslg exists
-    if [[ -S /mnt/wslg/.X11-unix/X0 ]]; then
-        WSLG_EXIST=0  # 1 means prefer wslg if it exists
-    fi
-    export WINPATH=$(echo $PATH | tr ':' '\n' | grep '/mnt/c' | tr '\n' ':' | sed 's/.$//')
-    export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
-    if [[ $(wslinfo --networking-mode) == mirrored ]]; then
-        # in mirrored, wsl connect connect to host services using 127.0.0.1
-        export HOSTIP=127.0.0.1
-    else
-        # assumed to be nat mode, the host is the router
-        () {
-            arr=($(ip route show default))
-            export HOSTIP=$arr[3]
-        }
-    fi
-    ex() {
-        /mnt/c/Windows/explorer.exe $(wslpath -w $1)
-    }
-    win() {
-        PATH=$WINPATH:$PATH $@
-    }
-    winpath() {
-        PATH=$WINPATH:$PATH whence -p "$1"
-    }
-    clip() {
-        iconv -f UTF-8 -t UTF-16LE | /mnt/c/Windows/System32/clip.exe
-    }
-    () {
-        # special vscode fast path, as win function is slow
-        local codepath=$(winpath code)
-        eval "code() { '$codepath' \$@ }"
-    }
-    if [[ $WSLG_EXIST != 1 ]]; then
-        export DISPLAY=$HOSTIP:0
-    fi
-fi
-
 # Fix ssh autocomplete
 () {
     zstyle ':completion:*:ssh:argument-1:*' tag-order hosts
@@ -203,6 +206,7 @@ export ASDF_GOLANG_MOD_VERSION_ENABLED=false
 if [[ -d ~/miniconda3 ]]; then
     source ~/miniconda3/etc/profile.d/conda.sh
 fi
+
 ctf() {
     # A fast but incomplete alternative to `conda activate ctf`
     local _ENV=ctf
