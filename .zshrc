@@ -121,6 +121,7 @@ zinit light Aloxaf/fzf-tab
 zinit ice wait lucid
 zinit light asdf-vm/asdf
 
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 zinit wait lucid light-mode for \
     atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" atload'FAST_HIGHLIGHT[chroma-man]=' \
         zdharma-continuum/fast-syntax-highlighting \
