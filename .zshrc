@@ -274,6 +274,9 @@ if (( $+commands[bat] )) then
 fi
 
 ZOXIDE_DIR=$XDG_DATA_HOME/zoxide
+if [[ ! -d $ZOXIDE_DIR ]]; then
+    mkdir -p $ZOXIDE_DIR
+fi
 if [[ ! -f $ZOXIDE_DIR/init.zsh ]]; then
     zoxide init zsh > $ZOXIDE_DIR/init.zsh
     zcompile $ZOXIDE_DIR/init.zsh
