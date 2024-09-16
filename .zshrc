@@ -35,7 +35,8 @@ if [[ -v WSL_DISTRO_NAME ]]; then
         }
     fi
     ex() {
-        /mnt/c/Windows/explorer.exe $(wslpath -w $1)
+        local arg=${1:-.}
+        /mnt/c/Windows/explorer.exe $(wslpath -w $arg)
     }
     win() {
         PATH=$WINPATH:$PATH $@
@@ -281,7 +282,7 @@ if [[ ! -f $ZOXIDE_DIR/init.zsh ]]; then
     zoxide init zsh > $ZOXIDE_DIR/init.zsh
     zcompile $ZOXIDE_DIR/init.zsh
 fi
-unalias zi
+alias cd >/dev/null && unalias zi
 source $ZOXIDE_DIR/init.zsh
 alias cd=z
 
