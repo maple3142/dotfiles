@@ -40,12 +40,13 @@ zinit ice wait lucid blockf atload$'
 zinit light Aloxaf/fzf-tab
 
 # use git completion from upstream
-gitver="v${$(git version)##*version }"
-zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull'%atclone' for \
-    "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.bash"
-zinit wait lucid as'completion' mv'git-completion.zsh -> _git' for \
-    "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
-unset gitver
+() {
+    local gitver="v${$(git version)##*version }"
+    zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull'%atclone' for \
+        "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.bash"
+    zinit wait lucid as'completion' mv'git-completion.zsh -> _git' for \
+        "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
+}
 
 zinit from'gh-r' as'program' for \
     pick'jq-*' mv'jq-* -> jq' jqlang/jq \
@@ -90,10 +91,10 @@ fi
 
 # Set title
 precmd() {
-    cwd=${PWD/#$HOME/'~'}
-    c=$(printf $cwd | sed -E -e 's|/(\.?)([^/])[^/]*|/\1\2|g' -e 's|~$||' -e 's|/[^/]*$|/|')  # ~/.hidden/folder/apple/orange -> ~/.h/f/a/o -> ~/.h/f/a
-    c=$c${cwd##*/}  # concat with basename
-    u=${USER//maple3142/🍁}
+    local cwd=${PWD/#$HOME/'~'}
+    local c=$(printf $cwd | sed -E -e 's|/(\.?)([^/])[^/]*|/\1\2|g' -e 's|~$||' -e 's|/[^/]*$|/|')  # ~/.hidden/folder/apple/orange -> ~/.h/f/a/o -> ~/.h/f/a
+    local c=$c${cwd##*/}  # concat with basename
+    local u=${USER//maple3142/🍁}
     printf "\033]0;$u@$HOST: $c\007"
 }
 
@@ -127,15 +128,16 @@ if [[ -v WSL_DISTRO_NAME ]]; then
         export HOSTIP=127.0.0.1
     else
         # assumed to be nat mode, the host is the router
-        arr=($(ip route show default))
-        export HOSTIP=$arr[3]
-        unset arr
+        () {
+            arr=($(ip route show default))
+            export HOSTIP=$arr[3]
+        }
     fi
     ex() {
         /mnt/c/Windows/explorer.exe $(wslpath -w $1)
     }
     win() {
-        [[ $# -ge 1 ]] && PATH=$WINPATH:$PATH $@
+        PATH=$WINPATH:$PATH $@
     }
     winpath() {
         PATH=$WINPATH:$PATH whence -p "$1"
@@ -143,9 +145,10 @@ if [[ -v WSL_DISTRO_NAME ]]; then
     clip() {
         iconv -f UTF-8 -t UTF-16LE | /mnt/c/Windows/System32/clip.exe
     }
-    __codepath=$(winpath code)
-    code() {
-        $__codepath $@
+    () {
+        # special vscode fast path, as win function is slow
+        local codepath=$(winpath code)
+        eval "code() { '$codepath' \$@ }"
     }
     if [[ $WSLG_EXIST != 1 ]]; then
         export DISPLAY=$HOSTIP:0
@@ -153,15 +156,16 @@ if [[ -v WSL_DISTRO_NAME ]]; then
 fi
 
 # Fix ssh autocomplete
-zstyle ':completion:*:ssh:argument-1:*' tag-order hosts
-h=()
-if [[ -r ~/.ssh/config ]]; then
-    h=($h ${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
-fi
-if [[ $#h -gt 0 ]]; then
-    zstyle ':completion:*:(ssh|scp|sftp|rsh|rsync):*' hosts $h
-fi
-unset h
+() {
+    zstyle ':completion:*:ssh:argument-1:*' tag-order hosts
+    local h=()
+    if [[ -r ~/.ssh/config ]]; then
+        h=($h ${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*[*?]*})
+    fi
+    if [[ $#h -gt 0 ]]; then
+        zstyle ':completion:*:(ssh|scp|sftp|rsh|rsync):*' hosts $h
+    fi
+}
 
 # Lang
 export LANG=en_US.UTF-8
@@ -201,9 +205,9 @@ if [[ -d ~/miniconda3 ]]; then
 fi
 ctf() {
     # A fast but incomplete alternative to `conda activate ctf`
-    _ENV=ctf
-    _PREFIX=$HOME/miniconda3/envs/$_ENV
-    _BINDIR=$_PREFIX/bin
+    local _ENV=ctf
+    local _PREFIX=$HOME/miniconda3/envs/$_ENV
+    local _BINDIR=$_PREFIX/bin
     if [[ -v SIMPLE_CONDA ]]; then
         export PATH=$(echo $PATH | sed "s|$_BINDIR||g")
         unset CONDA_PREFIX
@@ -276,24 +280,24 @@ fi
 # Poor mans ngrok
 if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+commands[mitmweb] )) then
     tunnel() {
-        CF_TUNNEL=ctf  # leave blank if you want to use *.trycloudflare.com
-        TUNNEL_CMD=$([[ $CF_TUNNEL = "" ]] && echo "" || echo "run $CF_TUNNEL")
+        local CF_TUNNEL=ctf  # leave blank if you want to use *.trycloudflare.com
+        local TUNNEL_CMD=$([[ $CF_TUNNEL = "" ]] && echo "" || echo "run $CF_TUNNEL")
         if [[ $# -eq 1 ]]; then
-            host=localhost
-            port=$1
+            local host=localhost
+            local port=$1
         elif [[ $# -eq 2 ]]; then
-            host=$1
-            port=$2
+            local host=$1
+            local port=$2
         else
             echo "Syntax: $0 [port] or $0 [host] [port]"
             return 1
         fi
-        sess="tunnel-$host-$port"
+        local sess="tunnel-$host-$port"
         if ! (tmux has-session -t $sess 2>&1 | grep -q "can't find"); then
             tmux at -t $sess
             return 0
         fi
-        proxy_port=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1])')
+        local proxy_port=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1])')
         tmux new -s "$sess" \
             "mitmweb --mode reverse:http://$host:$port -p $proxy_port --no-web-open-browser --web-port 4040"\; \
             split-window -v \
@@ -311,8 +315,8 @@ ncl() {
         return 1
     fi
     # need to enable GatewayPorts in remote sshd_config
-    host=$1
-    port=$2
+    local host=$1
+    local port=$2
     ssh -R $port:0.0.0.0:$port $host -N &
     nc -lv $port
     kill -9 $!
@@ -322,7 +326,7 @@ copy() {
     # copy with OSC 52 escape sequence
     # idk why printing to terminal doesn't work with curl...
     # tmux and screen bypass from https://github.com/rumpelsepp/oscclip/
-    f=$(mktemp)
+    local f=$(mktemp)
     if [[ ! -z $TMUX ]]; then
         printf '\033Ptmux;\033' >> $f
     elif [[ $TERM =~ ^screen ]]; then
@@ -346,13 +350,13 @@ msgpackd() {
 
 dotenv () {
     set -a
-    file=${1:-.env}
+    local file=${1:-.env}
     [ -f "$file" ] && source "$file"
     set +a
 }
 
 myip () {
-    method=$1
+    local method=$1
     if [[ ! $# -eq 1 ]]; then
         if (( $+commands[curl] )) then
             method=ipinfo
