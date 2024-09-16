@@ -48,14 +48,13 @@ zinit light Aloxaf/fzf-tab
         "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
 }
 
-zinit from'gh-r' as'program' for \
-    pick'jq-*' mv'jq-* -> jq' jqlang/jq \
-    pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep \
-    pick'eza-linux-*' extract eza-community/eza \
-    pick'bat-*-linux-*' extract mv'*/bat -> bat' @sharkdp/bat \
-    pick'fd-*-linux-*' extract mv'*/fd -> fd' pick'fd' @sharkdp/fd \
-    pick'fzf-*-linux-*' extract mv'*/fzf -> fzf' junegunn/fzf \
-    pick'zoxide-*-linux-*' extract atclone'./zoxide init zsh > .zoxide.zsh' atpull'%atclone' src'.zoxide.zsh' atload'alias cd=z' compile'.zoxide.zsh' atload'unalias zi' ajeetdsouza/zoxide \
+(( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv'jq-* -> jq' jqlang/jq
+(( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep
+(( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract eza-community/eza
+(( $+commands[bat] )) || zinit from'gh-r' as'program' for pick'bat-*-linux-*' extract mv'*/bat -> bat' @sharkdp/bat
+(( $+commands[fd] )) || zinit from'gh-r' as'program' for pick'fd-*-linux-*' extract mv'*/fd -> fd' pick'fd' @sharkdp/fd
+(( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract mv'*/fzf -> fzf' junegunn/fzf
+(( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' extract ajeetdsouza/zoxide
 
 zinit ice wait lucid
 zinit light asdf-vm/asdf
@@ -265,6 +264,15 @@ fi
 if (( $+commands[bat] )) then
     alias cat='bat -p'
 fi
+
+ZOXIDE_DIR=$XDG_DATA_HOME/zoxide
+if [[ ! -f $ZOXIDE_DIR/init.zsh ]]; then
+    zoxide init zsh > $ZOXIDE_DIR/init.zsh
+    zcompile $ZOXIDE_DIR/init.zsh
+fi
+source $ZOXIDE_DIR/init.zsh
+unalias zi
+alias cd=z
 
 # Rclone remember password
 if (( $+commands[rclone] )) then
