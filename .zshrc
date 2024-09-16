@@ -187,8 +187,8 @@ if [[ -d ~/.poetry ]]; then
 fi
 
 # Rust (uses rustup)
-if [[ -a ~/.cargo/env ]]; then
-    source ~/.cargo/env
+if [[ -a ~/.cargo/bin ]]; then
+    export PATH=$HOME/.cargo/bin:$PATH
 fi
 
 # Golang
