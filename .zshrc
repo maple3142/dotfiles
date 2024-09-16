@@ -155,7 +155,7 @@ USER_NICK=${USER:/maple3142/🍁}
 set_title() {
     local cwd=${PWD/#$HOME/'~'}
     # ~/.hidden/folder/apple/orange -> ~/.h/f/a/orange
-    local parts=(${(s|/|)cwd})
+    local parts=("${(@s|/|)cwd}")  # split by /, and keep empty parts
     for (( i = 1; i < ${#parts}; i++ )); do
         [[ ${parts[i]} =~ '(\.?.)' ]] && parts[i]=${match[1]}
     done
