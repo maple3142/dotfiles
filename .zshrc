@@ -281,8 +281,8 @@ if [[ ! -f $ZOXIDE_DIR/init.zsh ]]; then
     zoxide init zsh > $ZOXIDE_DIR/init.zsh
     zcompile $ZOXIDE_DIR/init.zsh
 fi
-source $ZOXIDE_DIR/init.zsh
 unalias zi
+source $ZOXIDE_DIR/init.zsh
 alias cd=z
 
 # Rclone remember password
