@@ -14,16 +14,22 @@ export RLWRAP_HOME=$XDG_DATA_HOME/rlwrap
 
 # Path
 if [[ $UID != 0 ]]; then
-    export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/sbin' | tr '\n' ':' | sed 's/.$//')
+    path=(${path:#*/sbin*})
 fi
+prepend_path() {
+    # prepend path if not exist
+    if ! (($path[(Ie)$1])); then
+        path=($1 $path)
+    fi
+}
 if [[ -d ~/.local/bin ]]; then
-    export PATH=$HOME/.local/bin:$PATH
+    prepend_path $HOME/.local/bin
 fi
 
 # WSL specific
 if [[ -v WSL_DISTRO_NAME ]]; then
-    export WINPATH=$(echo $PATH | tr ':' '\n' | grep '/mnt/c' | tr '\n' ':' | sed 's/.$//')
-    export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/mnt/c' | tr '\n' ':' | sed 's/.$//')
+    winpath=(${(M)path:#/mnt/c*})
+    path=(${path:#/mnt/c*})
     if [[ $(wslinfo --networking-mode) == mirrored ]]; then
         # in mirrored, wsl connect connect to host services using 127.0.0.1
         export HOSTIP=127.0.0.1
@@ -39,10 +45,10 @@ if [[ -v WSL_DISTRO_NAME ]]; then
         /mnt/c/Windows/explorer.exe $(wslpath -w $arg)
     }
     win() {
-        PATH=$WINPATH:$PATH $@
+        path=($winpath $path) $@
     }
     winpath() {
-        PATH=$WINPATH:$PATH whence -p "$1"
+        path=($winpath $path) whence -p "$1"
     }
     clip() {
         iconv -f UTF-8 -t UTF-16LE | /mnt/c/Windows/System32/clip.exe
@@ -79,8 +85,8 @@ zinit wait lucid light-mode for \
 zinit ice depth=1  # powerlevel10k does not support turbo mode
 zinit light romkatv/powerlevel10k
 
-zinit ice wait lucid multisrc'shell/{completion,key-bindings}.zsh' id-as'junegunn/fzf_completions' pick'/dev/null'
-zinit light junegunn/fzf
+zinit ice wait lucid
+zinit snippet https://github.com/junegunn/fzf/raw/master/shell/key-bindings.zsh
 
 zinit ice wait lucid blockf atload$'
     zstyle \':fzf-tab:complete:(cd|z|cat|bat|ls|eza|rg|fd|grep|vim|code):*\' fzf-preview \'if [[ -d $realpath ]]; then eza -1 --color=always $realpath; elif [[ -f $realpath ]]; then if $(file $realpath | grep -qe text); then head -c 1024 $realpath | bat -p -f --file-name $realpath; else file $realpath; fi; fi \'
@@ -191,19 +197,19 @@ export FZF_ALT_C_COMMAND='fd --type d --exclude .git --exclude .cfg --ignore-fil
 
 # Python (Poetry)
 if [[ -d ~/.poetry ]]; then
-    export PATH=$HOME/.poetry/bin:$PATH
+    prepend_path $HOME/.poetry/bin
 fi
 
 # Rust (uses rustup)
 if [[ -a ~/.cargo/bin ]]; then
-    export PATH=$HOME/.cargo/bin:$PATH
+    prepend_path $HOME/.cargo/bin
 fi
 
 # Golang
 export GOPATH=$XDG_DATA_HOME/go
 export GOMODCACHE=$XDG_CACHE_HOME/go/mod
 if [[ -d $GOPATH ]]; then
-    export PATH=$GOPATH/bin:$PATH
+    prepend_path $GOPATH/bin
 fi
 export ASDF_GOLANG_MOD_VERSION_ENABLED=false
 
@@ -218,7 +224,7 @@ ctf() {
     local _PREFIX=$HOME/miniconda3/envs/$_ENV
     local _BINDIR=$_PREFIX/bin
     if [[ -v SIMPLE_CONDA ]]; then
-        export PATH=$(echo $PATH | sed "s|$_BINDIR||g")
+        path=(${path:#$_BINDIR})
         unset CONDA_PREFIX
         unset CONDA_DEFAULT_ENV
         unset CONDA_PROMPT_MODIFIER
@@ -229,7 +235,7 @@ ctf() {
         if [[ -v CONDA_PREFIX ]]; then
             echo 'Please deactivate official conda first'
         else
-            export PATH=$_BINDIR:$PATH
+            path=($_BINDIR $path)
             export CONDA_PREFIX=$_PREFIX
             export CONDA_DEFAULT_ENV=$_ENV
             export CONDA_PROMPT_MODIFIER="($_ENV)"
