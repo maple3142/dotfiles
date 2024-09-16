@@ -151,13 +151,17 @@ if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
 fi
 
 # Set title
-precmd() {
+USER_NICK=${USER:/maple3142/🍁}
+set_title() {
     local cwd=${PWD/#$HOME/'~'}
-    local c=$(printf $cwd | sed -E -e 's|/(\.?)([^/])[^/]*|/\1\2|g' -e 's|~$||' -e 's|/[^/]*$|/|')  # ~/.hidden/folder/apple/orange -> ~/.h/f/a/o -> ~/.h/f/a
-    local c=$c${cwd##*/}  # concat with basename
-    local u=${USER//maple3142/🍁}
-    printf "\033]0;$u@$HOST: $c\007"
+    # ~/.hidden/folder/apple/orange -> ~/.h/f/a/orange
+    local parts=(${(s|/|)cwd})
+    for (( i = 1; i < ${#parts}; i++ )); do
+        [[ ${parts[i]} =~ '(\.?.)' ]] && parts[i]=${match[1]}
+    done
+    printf "\033]0;$USER_NICK@$HOST: ${(j:/:)parts}\007"
 }
+add-zsh-hook precmd set_title
 
 # Zsh settings
 ZSH_DISABLE_COMPFIX=true
