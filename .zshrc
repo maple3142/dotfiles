@@ -30,7 +30,12 @@ fi
 if [[ -v WSL_DISTRO_NAME ]]; then
     winpath=(${(M)path:#/mnt/c*})
     path=(${path:#/mnt/c*})
-    if [[ $(wslinfo --networking-mode) == mirrored ]]; then
+    local wslnmfile=/tmp/wsl_networking_mode
+    if [[ ! -f $wslnmfile ]]; then
+        # cache wsl networking mode to avoid calling external process in zshrc
+        wslinfo --networking-mode > $wslnmfile
+    fi
+    if [[ $(<$wslnmfile) == mirrored ]]; then
         # in mirrored, wsl connect connect to host services using 127.0.0.1
         export HOSTIP=127.0.0.1
     else
@@ -126,7 +131,7 @@ zinit wait lucid light-mode for \
         esc/conda-zsh-completion
 
 # GPG TTY
-export GPG_TTY=$(tty)
+export GPG_TTY=$TTY
 
 # Setup ssh agent
 if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
@@ -280,17 +285,19 @@ if (( $+commands[bat] )) then
     alias cat='bat -p'
 fi
 
-ZOXIDE_DIR=$XDG_DATA_HOME/zoxide
-if [[ ! -d $ZOXIDE_DIR ]]; then
-    mkdir -p $ZOXIDE_DIR
+if (( $+commands[zoxide] )) then
+    ZOXIDE_DIR=$XDG_DATA_HOME/zoxide
+    if [[ ! -d $ZOXIDE_DIR ]]; then
+        mkdir -p $ZOXIDE_DIR
+    fi
+    if [[ ! -f $ZOXIDE_DIR/init.zsh ]]; then
+        zoxide init zsh > $ZOXIDE_DIR/init.zsh
+        zcompile $ZOXIDE_DIR/init.zsh
+    fi
+    alias zi >/dev/null && unalias zi
+    source $ZOXIDE_DIR/init.zsh
+    alias cd=z
 fi
-if [[ ! -f $ZOXIDE_DIR/init.zsh ]]; then
-    zoxide init zsh > $ZOXIDE_DIR/init.zsh
-    zcompile $ZOXIDE_DIR/init.zsh
-fi
-alias zi >/dev/null && unalias zi
-source $ZOXIDE_DIR/init.zsh
-alias cd=z
 
 # Rclone remember password
 if (( $+commands[rclone] )) then
