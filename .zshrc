@@ -294,7 +294,7 @@ if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+co
             return 1
         fi
         local sess="tunnel-$host-$port"
-        if ! (tmux has-session -t $sess 2>&1 | grep -q "can't find"); then
+        if tmux has-session -t $sess >/dev/null 2>&1; then
             tmux at -t $sess
             return 0
         fi
