@@ -180,7 +180,8 @@ export LANG=en_US.UTF-8
 export EDITOR=vim
 
 # Colored Man Page
-export MANPAGER='less -R --use-color -Dd+r -Du+b'
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT='-c'
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --exclude .git --exclude .cfg --ignore-file ~/.config/fzf_fdignore'
