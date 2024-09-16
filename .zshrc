@@ -46,11 +46,14 @@ if [[ -v WSL_DISTRO_NAME ]]; then
     clip() {
         iconv -f UTF-8 -t UTF-16LE | /mnt/c/Windows/System32/clip.exe
     }
-    () {
-        # special vscode fast path, as win function is slow
-        local codepath=$(winpath code)
-        eval "code() { '$codepath' \$@ }"
-    }
+    if (( ! $+commands[code] )); then
+        # Recommended solution: sudo ln -s "$(winpath code)" /usr/local/bin/code
+        () {
+            # special vscode fast path, as win function is slow
+            local codepath=$(winpath code)
+            eval "code() { '$codepath' \$@ }"
+        }
+    fi
     PREFER_X11=${PREFER_X11:-0}
     if [[ ! -S /tmp/.X11-unix/X0 ]] || [[ $PREFER_X11 == 1 ]]; then
         export DISPLAY=$HOSTIP:0
