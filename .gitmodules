@@ -9,3 +9,6 @@
 [submodule ".local/share/zinit/plugins/Aloxaf---fzf-tab"]
 	path = .local/share/zinit/plugins/Aloxaf---fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab.git
+[submodule ".local/share/zinit/plugins/asdf-vm---asdf"]
+	path = .local/share/zinit/plugins/asdf-vm---asdf
+	url = https://github.com/asdf-vm/asdf.git
