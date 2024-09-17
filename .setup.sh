@@ -32,6 +32,7 @@ zinit() {
 
 log "Try getting required binaries"
 LOCAL_BIN=$HOME/.local/bin
+[[ -d $LOCAL_BIN ]] || mkdir -p $LOCAL_BIN
 (( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv"jq-* -> $LOCAL_BIN/jq" jqlang/jq
 (( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv"*/rg -> $LOCAL_BIN/rg" BurntSushi/ripgrep
 (( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract mv"eza -> $LOCAL_BIN/eza" eza-community/eza
@@ -40,9 +41,13 @@ LOCAL_BIN=$HOME/.local/bin
 (( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract mv"fzf -> $LOCAL_BIN/fzf" junegunn/fzf
 (( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' mv"zoxide -> $LOCAL_BIN/zoxide" extract ajeetdsouza/zoxide
 
+[[ -d $ZINIT_DIR ]] && log "Cleaning up zinit" && rm -rf $ZINIT_DIR
+
 log "Cloning dotfiles"
-git init --bare "$HOME/.cfg"
-alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+git init -b master --bare "$HOME/.cfg"
+cfg() {
+	git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
+}
 cfg config core.excludesfile .cfgignore
 cfg config status.showUntrackedFiles no
 cfg config pull.ff only
