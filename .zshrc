@@ -1,7 +1,8 @@
 #!/usr/bin/zsh
 # Powerlevel10k Instant Prompt
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+_P10K_CACHE_SUFFIX="-$TERM-${TERM_PROGRAM:-unknown}"
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}${_P10K_CACHE_SUFFIX}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}${_P10K_CACHE_SUFFIX}.zsh"
 fi
 
 # XDG
@@ -87,8 +88,8 @@ zinit wait lucid light-mode for \
     OMZL::key-bindings.zsh \
     OMZP::sudo/sudo.plugin.zsh
 
-zinit ice depth=1  # powerlevel10k does not support turbo mode
-zinit light romkatv/powerlevel10k
+zinit ice cloneopts"--branch per-term-instant-prompt" depth=1
+zinit light maple3142/powerlevel10k
 
 zinit ice wait lucid
 zinit snippet https://github.com/junegunn/fzf/raw/master/shell/key-bindings.zsh
