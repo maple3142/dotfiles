@@ -75,6 +75,13 @@ if [[ -v WSL_DISTRO_NAME ]]; then
     fi
 fi
 
+# ZSHRC
+ZSHRC_DIR=$XDG_CONFIG_HOME/zshrc
+ZSHRC_SNIPPETS_DIR=$XDG_CONFIG_HOME/zshrc/snippets
+if [[ ! -d $ZSHRC_SNIPPETS_DIR ]]; then
+    mkdir -p $ZSHRC_SNIPPETS_DIR
+fi
+
 # ZInit
 ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
 ZINIT_HOME=$ZINIT_DIR/zinit.git
@@ -82,17 +89,23 @@ ZINIT_HOME=$ZINIT_DIR/zinit.git
 # [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
 source ${ZINIT_HOME}/zinit.zsh
 
-zinit snippet OMZL::history.zsh  # turbo mode would make auto-auggestions not work at start
+# turbo mode would make auto-auggestions not work at start
+# zinit snippet OMZL::history.zsh
+zinit snippet $ZSHRC_SNIPPETS_DIR/omzl-history.zsh
 
-zinit wait lucid light-mode for \
-    OMZL::key-bindings.zsh \
-    OMZP::sudo/sudo.plugin.zsh
+# zinit wait lucid light-mode for \
+#     OMZL::key-bindings.zsh \
+#     OMZP::sudo/sudo.plugin.zsh
+zinit wait lucid light-mode is-snippet for \
+    $ZSHRC_SNIPPETS_DIR/omzl-key-bindings.zsh \
+    $ZSHRC_SNIPPETS_DIR/omzp-sudo.zsh
+
+zinit ice wait lucid
+# zinit snippet https://github.com/junegunn/fzf/raw/master/shell/key-bindings.zsh
+zinit snippet $ZSHRC_SNIPPETS_DIR/fzf-key-bindings.zsh
 
 zinit ice cloneopts"--branch per-term-instant-prompt" depth=1
 zinit light maple3142/powerlevel10k
-
-zinit ice wait lucid
-zinit snippet https://github.com/junegunn/fzf/raw/master/shell/key-bindings.zsh
 
 zinit ice wait lucid blockf atload$'
     zstyle \':fzf-tab:complete:(cd|z|cat|bat|ls|eza|rg|fd|grep|vim|code):*\' fzf-preview \'if [[ -d $realpath ]]; then eza -1 --color=always $realpath; elif [[ -f $realpath ]]; then if $(file $realpath | grep -qe text); then head -c 1024 $realpath | bat -p -f --file-name $realpath; else file $realpath; fi; fi \'
