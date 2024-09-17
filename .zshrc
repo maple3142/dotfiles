@@ -23,8 +23,9 @@ prepend_path() {
         path=($1 $path)
     fi
 }
-if [[ -d ~/.local/bin ]]; then
-    prepend_path $HOME/.local/bin
+LOCAL_BIN=$HOME/.local/bin
+if [[ -d $LOCAL_BIN ]]; then
+    prepend_path $LOCAL_BIN
 fi
 
 # WSL specific
@@ -84,13 +85,13 @@ zinit() {
     source ${ZINIT_HOME}/zinit.zsh && zinit $@
 }
 
-(( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv'jq-* -> jq' jqlang/jq
-(( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep
-(( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract eza-community/eza
-(( $+commands[bat] )) || zinit from'gh-r' as'program' for pick'bat-*-linux-*' extract mv'*/bat -> bat' @sharkdp/bat
-(( $+commands[fd] )) || zinit from'gh-r' as'program' for pick'fd-*-linux-*' extract mv'*/fd -> fd' pick'fd' @sharkdp/fd
-(( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract junegunn/fzf
-(( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' extract ajeetdsouza/zoxide
+(( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv"jq-* -> $LOCAL_BIN/jq" jqlang/jq
+(( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv"*/rg -> $LOCAL_BIN/rg" BurntSushi/ripgrep
+(( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract mv"eza -> $LOCAL_BIN/eza" eza-community/eza
+(( $+commands[bat] )) || zinit from'gh-r' as'program' for pick'bat-*-linux-*' extract mv"*/bat -> $LOCAL_BIN/bat" @sharkdp/bat
+(( $+commands[fd] )) || zinit from'gh-r' as'program' for pick'fd-*-linux-*' extract mv"*/fd -> $LOCAL_BIN/fd" pick'fd' @sharkdp/fd
+(( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract mv"fzf -> $LOCAL_BIN/fzf" junegunn/fzf
+(( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' mv"zoxide -> $LOCAL_BIN/zoxide" extract ajeetdsouza/zoxide
 
 # zshrc snippets, plugins, completions
 ZSHRC_DIR=$XDG_CONFIG_HOME/zshrc
