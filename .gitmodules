@@ -18,32 +18,11 @@
 	path = .config/zshrc/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
 [submodule "zsh-completions"]
-	path = .config/zshrc/plugins/zsh-completions
-	url = https://github.com/zsh-users/zsh-completions.git
-[submodule "conda-zsh-completion"]
-	path = .config/zshrc/plugins/conda-zsh-completion
-	url = https://github.com/conda-incubator/conda-zsh-completion.git
-[submodule ".config/zshrc/plugins/powerlevel10k"]
-	path = .config/zshrc/plugins/powerlevel10k
-	url = https://github.com/maple3142/powerlevel10k.git
-[submodule ".config/zshrc/plugins/fzf-tab"]
-	path = .config/zshrc/plugins/fzf-tab
-	url = https://github.com/Aloxaf/fzf-tab.git
-[submodule ".config/zshrc/plugins/asdf"]
-	path = .config/zshrc/plugins/asdf
-	url = https://github.com/asdf-vm/asdf.git
-[submodule ".config/zshrc/plugins/fast-syntax-highlighting"]
-	path = .config/zshrc/plugins/fast-syntax-highlighting
-	url = https://github.com/zdharma-continuum/fast-syntax-highlighting.git
-[submodule ".config/zshrc/plugins/zsh-autosuggestions"]
-	path = .config/zshrc/plugins/zsh-autosuggestions
-	url = https://github.com/zsh-users/zsh-autosuggestions.git
-[submodule ".config/zshrc/plugins/zsh-completions"]
 	path = .config/zshrc/completions/zsh-completions
 	url = https://github.com/zsh-users/zsh-completions.git
-[submodule ".config/zshrc/plugins/conda-zsh-completion"]
+[submodule "conda-zsh-completion"]
 	path = .config/zshrc/completions/conda-zsh-completion
 	url = https://github.com/conda-incubator/conda-zsh-completion.git
-[submodule "/home/maple3142/.config/zshrc/plugins/zsh-defer"]
-	path = /home/maple3142/.config/zshrc/plugins/zsh-defer
+[submodule "zsh-defer"]
+	path = .config/zshrc/plugins/zsh-defer
 	url = https://github.com/romkatv/zsh-defer.git
