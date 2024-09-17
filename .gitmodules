@@ -1,25 +1,25 @@
-[submodule ".local/share/zinit/zinit.git"]
+[submodule "zinit"]
 	path = .local/share/zinit/zinit.git
 	url = https://github.com/zdharma-continuum/zinit.git
-[submodule ".local/share/zinit/plugins/maple3142---powerlevel10k"]
-	path = .local/share/zinit/plugins/maple3142---powerlevel10k
+[submodule "powerlevel10k"]
+	path = .config/zshrc/plugins/powerlevel10k
     url = https://github.com/maple3142/powerlevel10k.git
     branch = per-term-instant-prompt
-[submodule ".local/share/zinit/plugins/Aloxaf---fzf-tab"]
-	path = .local/share/zinit/plugins/Aloxaf---fzf-tab
+[submodule "fzf-tab"]
+	path = .config/zshrc/plugins/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab.git
-[submodule ".local/share/zinit/plugins/asdf-vm---asdf"]
-	path = .local/share/zinit/plugins/asdf-vm---asdf
+[submodule "asdf"]
+	path = .config/zshrc/plugins/asdf
 	url = https://github.com/asdf-vm/asdf.git
-[submodule ".local/share/zinit/plugins/zdharma-continuum---fast-syntax-highlighting"]
-	path = .local/share/zinit/plugins/zdharma-continuum---fast-syntax-highlighting
+[submodule "fast-syntax-highlighting"]
+	path = .config/zshrc/plugins/fast-syntax-highlighting
 	url = https://github.com/zdharma-continuum/fast-syntax-highlighting.git
-[submodule ".local/share/zinit/plugins/zsh-users---zsh-autosuggestions"]
-	path = .local/share/zinit/plugins/zsh-users---zsh-autosuggestions
+[submodule "zsh-autosuggestions"]
+	path = .config/zshrc/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
-[submodule ".local/share/zinit/plugins/zsh-users---zsh-completions"]
-	path = .local/share/zinit/plugins/zsh-users---zsh-completions
+[submodule "zsh-completions"]
+	path = .config/zshrc/plugins/zsh-completions
 	url = https://github.com/zsh-users/zsh-completions.git
-[submodule ".local/share/zinit/plugins/conda-incubator---conda-zsh-completion"]
-	path = .local/share/zinit/plugins/conda-incubator---conda-zsh-completion
+[submodule "conda-zsh-completion"]
+	path = .config/zshrc/plugins/conda-zsh-completion
 	url = https://github.com/conda-incubator/conda-zsh-completion.git
