@@ -169,7 +169,7 @@ if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
 fi
 
 # Set title
-USER_NICK=${USER:/maple3142/🍁}
+USER_NICK=${${(%):-%n}:/maple3142/🍁}
 set_title() {
     local cwd=${PWD/#$HOME/'~'}
     # ~/.hidden/folder/apple/orange -> ~/.h/f/a/orange
