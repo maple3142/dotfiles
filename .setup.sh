@@ -26,6 +26,7 @@ cfg config pull.ff only
 cfg remote add origin https://github.com/maple3142/dotfiles.git
 cfg fetch origin
 cfg checkout -f -b master --track origin/master
-log "Remember to use \`chsh -s $(which zsh)\` to change default shell"
+cfg submodule update --init --recursive
+log "Remember to use \`chsh -s $(command -v zsh)\` to change default shell"
 log "Done! Please manually launch \`zsh\` to enjoy!"
 

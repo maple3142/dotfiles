@@ -1,0 +1,9 @@
+[submodule "/home/maple3142/.local/share/zinit/zinit.git"]
+	path = /home/maple3142/.local/share/zinit/zinit.git
+	url = https://github.com/zdharma-continuum/zinit.git
+[submodule "local/share/zinit/zinit.git"]
+	path = local/share/zinit/zinit.git
+	url = https://github.com/zdharma-continuum/zinit.git
+[submodule ".local/share/zinit/zinit.git"]
+	path = .local/share/zinit/zinit.git
+	url = https://github.com/zdharma-continuum/zinit.git

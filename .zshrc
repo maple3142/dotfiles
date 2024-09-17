@@ -79,7 +79,7 @@ fi
 ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
 ZINIT_HOME=$ZINIT_DIR/zinit.git
 [ ! -d $ZINIT_HOME ] && mkdir -p $ZINIT_DIR
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
+# [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
 source ${ZINIT_HOME}/zinit.zsh
 
 zinit snippet OMZL::history.zsh  # turbo mode would make auto-auggestions not work at start
