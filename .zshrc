@@ -102,14 +102,17 @@ zinit ice wait lucid blockf atload$'
 '
 zinit light Aloxaf/fzf-tab
 
-# use git completion from upstream
-() {
-    local gitver="v${$(git version)##*version }"
-    zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull'%atclone' for \
-        "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.bash"
-    zinit wait lucid as'completion' mv'git-completion.zsh -> _git' for \
-        "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
-}
+# use git completion from upstream, which support file completion with alternative worktree and git-dir (cfg)
+USE_UPSTREAM_GIT_COMPLETION=${USE_UPSTREAM_GIT_COMPLETION:-0}
+if [[ USE_UPSTREAM_GIT_COMPLETION != 0 ]]; then
+    () {
+        local gitver="v${$(git version)##*version }"
+        zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull'%atclone' for \
+            "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.bash"
+        zinit wait lucid as'completion' mv'git-completion.zsh -> _git' for \
+            "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
+    }
+fi
 
 (( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv'jq-* -> jq' jqlang/jq
 (( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep
