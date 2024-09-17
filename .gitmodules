@@ -44,3 +44,6 @@
 [submodule ".config/zshrc/plugins/conda-zsh-completion"]
 	path = .config/zshrc/completions/conda-zsh-completion
 	url = https://github.com/conda-incubator/conda-zsh-completion.git
+[submodule "/home/maple3142/.config/zshrc/plugins/zsh-defer"]
+	path = /home/maple3142/.config/zshrc/plugins/zsh-defer
+	url = https://github.com/romkatv/zsh-defer.git
