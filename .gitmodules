@@ -20,3 +20,6 @@
 [submodule ".local/share/zinit/plugins/zsh-users---zsh-completions"]
 	path = .local/share/zinit/plugins/zsh-users---zsh-completions
 	url = https://github.com/zsh-users/zsh-completions.git
+[submodule ".local/share/zinit/plugins/conda-incubator---conda-zsh-completion"]
+	path = .local/share/zinit/plugins/conda-incubator---conda-zsh-completion
+	url = https://github.com/conda-incubator/conda-zsh-completion.git
