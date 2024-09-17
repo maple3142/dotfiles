@@ -1,4 +1,8 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+if [ -z "$ZSH_VERSION" ]; then
+	echo "Please run this script with zsh"
+	exit 1
+fi
 shopt -s expand_aliases
 WHITE='\033[1;37m'
 LGREEN='\033[1;32m'
@@ -13,10 +17,27 @@ require(){
 		exit 1
 	fi
 }
-require zsh || exit $?
 require git || exit $?
 cd ~ || { echo "Unable to cd ~"; exit 1; }
 rm -rf "$HOME/.cfg"
+# ZInit, still used for downloading programs
+ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
+ZINIT_HOME=$ZINIT_DIR/zinit.git
+zinit() {
+    [ ! -d $ZINIT_HOME ] && mkdir -p $ZINIT_DIR
+    [ ! -d $ZINIT_HOME/.git ] && log "Cloning zinit for downloading programs" && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
+    source ${ZINIT_HOME}/zinit.zsh && zinit $@
+}
+
+log "Try getting required binaries"
+(( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv"jq-* -> $LOCAL_BIN/jq" jqlang/jq
+(( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv"*/rg -> $LOCAL_BIN/rg" BurntSushi/ripgrep
+(( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract mv"eza -> $LOCAL_BIN/eza" eza-community/eza
+(( $+commands[bat] )) || zinit from'gh-r' as'program' for pick'bat-*-linux-*' extract mv"*/bat -> $LOCAL_BIN/bat" @sharkdp/bat
+(( $+commands[fd] )) || zinit from'gh-r' as'program' for pick'fd-*-linux-*' extract mv"*/fd -> $LOCAL_BIN/fd" pick'fd' @sharkdp/fd
+(( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract mv"fzf -> $LOCAL_BIN/fzf" junegunn/fzf
+(( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' mv"zoxide -> $LOCAL_BIN/zoxide" extract ajeetdsouza/zoxide
+
 log "Cloning dotfiles"
 git init --bare "$HOME/.cfg"
 alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
