@@ -130,7 +130,7 @@ zinit wait lucid light-mode for \
         zsh-users/zsh-autosuggestions \
     as'completion' blockf \
         zsh-users/zsh-completions \
-        esc/conda-zsh-completion
+        conda-incubator/conda-zsh-completion
 
 # GPG TTY
 export GPG_TTY=$TTY
