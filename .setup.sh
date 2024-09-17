@@ -30,6 +30,7 @@ zinit() {
 }
 
 log "Try getting required binaries"
+LOCAL_BIN=$HOME/.local/bin
 (( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv"jq-* -> $LOCAL_BIN/jq" jqlang/jq
 (( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv"*/rg -> $LOCAL_BIN/rg" BurntSushi/ripgrep
 (( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract mv"eza -> $LOCAL_BIN/eza" eza-community/eza
