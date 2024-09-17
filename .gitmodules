@@ -23,9 +23,6 @@
 [submodule "conda-zsh-completion"]
 	path = .config/zshrc/plugins/conda-zsh-completion
 	url = https://github.com/conda-incubator/conda-zsh-completion.git
-[submodule ".local/share/zinit/zinit.git"]
-	path = .local/share/zinit/zinit.git
-	url = https://github.com/zdharma-continuum/zinit.git
 [submodule ".config/zshrc/plugins/powerlevel10k"]
 	path = .config/zshrc/plugins/powerlevel10k
 	url = https://github.com/maple3142/powerlevel10k.git

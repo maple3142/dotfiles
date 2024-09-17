@@ -75,7 +75,24 @@ if [[ -v WSL_DISTRO_NAME ]]; then
     fi
 fi
 
-# ZSHRC
+# ZInit, still used for downloading programs
+ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
+ZINIT_HOME=$ZINIT_DIR/zinit.git
+zinit() {
+    [ ! -d $ZINIT_HOME ] && mkdir -p $ZINIT_DIR
+    [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
+    source ${ZINIT_HOME}/zinit.zsh && zinit $@
+}
+
+(( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv'jq-* -> jq' jqlang/jq
+(( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep
+(( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract eza-community/eza
+(( $+commands[bat] )) || zinit from'gh-r' as'program' for pick'bat-*-linux-*' extract mv'*/bat -> bat' @sharkdp/bat
+(( $+commands[fd] )) || zinit from'gh-r' as'program' for pick'fd-*-linux-*' extract mv'*/fd -> fd' pick'fd' @sharkdp/fd
+(( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract junegunn/fzf
+(( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' extract ajeetdsouza/zoxide
+
+# zshrc snippets, plugins, completions
 ZSHRC_DIR=$XDG_CONFIG_HOME/zshrc
 ZSHRC_SNIPPETS_DIR=$XDG_CONFIG_HOME/zshrc/snippets
 ZSHRC_PLUGINS_DIR=$XDG_CONFIG_HOME/zshrc/plugins
@@ -83,17 +100,6 @@ ZSHRC_COMPLETIONS_DIR=$XDG_CONFIG_HOME/zshrc/completions
 [[ ! -d $ZSHRC_SNIPPETS_DIR ]] && mkdir -p $ZSHRC_SNIPPETS_DIR
 [[ ! -d $ZSHRC_PLUGINS_DIR ]] && mkdir -p $ZSHRC_PLUGINS_DIR
 [[ ! -d $ZSHRC_COMPLETIONS_DIR ]] && mkdir -p $ZSHRC_COMPLETIONS_DIR
-
-# ZInit
-ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
-ZINIT_HOME=$ZINIT_DIR/zinit.git
-[ ! -d $ZINIT_HOME ] && mkdir -p $ZINIT_DIR
-# [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
-# source ${ZINIT_HOME}/zinit.zsh
-# still used for downloading programs
-zinit() {
-    source ${ZINIT_HOME}/zinit.zsh && zinit $@
-}
 
 autoload compinit
 
@@ -142,14 +148,6 @@ fpath+=$ZSHRC_PLUGINS_DIR/asdf/completions
 fpath+=$ZSHRC_COMPLETIONS_DIR/zsh-completions/src
 fpath+=$ZSHRC_COMPLETIONS_DIR/conda-zsh-completion
 zsh-defer -c compinit
-
-(( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv'jq-* -> jq' jqlang/jq
-(( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep
-(( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract eza-community/eza
-(( $+commands[bat] )) || zinit from'gh-r' as'program' for pick'bat-*-linux-*' extract mv'*/bat -> bat' @sharkdp/bat
-(( $+commands[fd] )) || zinit from'gh-r' as'program' for pick'fd-*-linux-*' extract mv'*/fd -> fd' pick'fd' @sharkdp/fd
-(( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract junegunn/fzf
-(( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' extract ajeetdsouza/zoxide
 
 # GPG TTY
 export GPG_TTY=$TTY
