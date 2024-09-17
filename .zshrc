@@ -79,53 +79,64 @@ fi
 ZSHRC_DIR=$XDG_CONFIG_HOME/zshrc
 ZSHRC_SNIPPETS_DIR=$XDG_CONFIG_HOME/zshrc/snippets
 ZSHRC_PLUGINS_DIR=$XDG_CONFIG_HOME/zshrc/plugins
+ZSHRC_COMPLETIONS_DIR=$XDG_CONFIG_HOME/zshrc/completions
 [[ ! -d $ZSHRC_SNIPPETS_DIR ]] && mkdir -p $ZSHRC_SNIPPETS_DIR
 [[ ! -d $ZSHRC_PLUGINS_DIR ]] && mkdir -p $ZSHRC_PLUGINS_DIR
+[[ ! -d $ZSHRC_COMPLETIONS_DIR ]] && mkdir -p $ZSHRC_COMPLETIONS_DIR
 
 # ZInit
 ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
 ZINIT_HOME=$ZINIT_DIR/zinit.git
 [ ! -d $ZINIT_HOME ] && mkdir -p $ZINIT_DIR
 # [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME
-source ${ZINIT_HOME}/zinit.zsh
+# source ${ZINIT_HOME}/zinit.zsh
+# still used for downloading programs
+zinit() {
+    source ${ZINIT_HOME}/zinit.zsh && zinit $@
+}
 
-# turbo mode would make auto-auggestions not work at start
-# zinit snippet OMZL::history.zsh
-zinit snippet $ZSHRC_SNIPPETS_DIR/omzl-history.zsh
+autoload compinit
 
-# zinit wait lucid light-mode for \
-#     OMZL::key-bindings.zsh \
-#     OMZP::sudo/sudo.plugin.zsh
-zinit wait lucid light-mode is-snippet for \
-    $ZSHRC_SNIPPETS_DIR/omzl-key-bindings.zsh \
-    $ZSHRC_SNIPPETS_DIR/omzp-sudo.zsh
+source $ZSHRC_SNIPPETS_DIR/omzl-history.zsh  # this sets some history options, so it can't be deferred
+source $ZSHRC_PLUGINS_DIR/powerlevel10k/powerlevel10k.zsh-theme  # theme, can't be deferred
+source $ZSHRC_PLUGINS_DIR/zsh-defer/zsh-defer.plugin.zsh  # defer itself can't be deferred
 
-zinit ice wait lucid
-# zinit snippet https://github.com/junegunn/fzf/raw/master/shell/key-bindings.zsh
-zinit snippet $ZSHRC_SNIPPETS_DIR/fzf-key-bindings.zsh
+zsh-defer source $ZSHRC_SNIPPETS_DIR/omzl-key-bindings.zsh
+zsh-defer source $ZSHRC_SNIPPETS_DIR/omzp-sudo.zsh
+zsh-defer source $ZSHRC_SNIPPETS_DIR/fzf-key-bindings.zsh
 
-zinit ice cloneopts"--branch per-term-instant-prompt" depth=1
-zinit light $ZSHRC_PLUGINS_DIR/powerlevel10k
-
-zinit ice wait lucid blockf atload$'
+zsh-defer source $ZSHRC_PLUGINS_DIR/fzf-tab/fzf-tab.plugin.zsh
+zsh-defer -c $'
     zstyle \':fzf-tab:complete:(cd|z|cat|bat|ls|eza|rg|fd|grep|vim|code):*\' fzf-preview \'if [[ -d $realpath ]]; then eza -1 --color=always $realpath; elif [[ -f $realpath ]]; then if $(file $realpath | grep -qe text); then head -c 1024 $realpath | bat -p -f --file-name $realpath; else file $realpath; fi; fi \'
     zstyle \':fzf-tab:complete:*:options\' fzf-preview
     zstyle \':fzf-tab:complete:*:argument-1\' fzf-preview
     zstyle \':completion:*\' menu select
 '
-zinit light $ZSHRC_PLUGINS_DIR/fzf-tab
 
-# use git completion from upstream, which support file completion with alternative worktree and git-dir (cfg)
+zsh-defer source $ZSHRC_PLUGINS_DIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+zsh-defer -c 'FAST_HIGHLIGHT[chroma-man]='
+
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+zsh-defer source $ZSHRC_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+
+zsh-defer source $ZSHRC_PLUGINS_DIR/asdf/asdf.sh
+
 USE_UPSTREAM_GIT_COMPLETION=${USE_UPSTREAM_GIT_COMPLETION:-0}
 if [[ $USE_UPSTREAM_GIT_COMPLETION != 0 ]]; then
     () {
         local gitver="v${$(git version)##*version }"
-        zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull'%atclone' for \
-            "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.bash"
-        zinit wait lucid as'completion' mv'git-completion.zsh -> _git' for \
-            "https://github.com/git/git/raw/$gitver/contrib/completion/git-completion.zsh"
+        if [[ ! -f $ZSHRC_COMPLETIONS_DIR/git$gitver ]]; then
+            curl -sS https://raw.githubusercontent.com/git/git/$gitver/contrib/completion/git-completion.bash > $ZSHRC_COMPLETIONS_DIR/git-completion.bash
+            curl -sS https://raw.githubusercontent.com/git/git/$gitver/contrib/completion/git-completion.zsh > $ZSHRC_COMPLETIONS_DIR/_git
+            zcompile $ZSHRC_COMPLETIONS_DIR/_git
+            touch $ZSHRC_COMPLETIONS_DIR/git$gitver
+        fi
+        zstyle ':completion:*:*:git:*' script $ZSHRC_COMPLETIONS_DIR/git-completion.bash
     }
 fi
+
+fpath=($ZSHRC_COMPLETIONS_DIR $ZSHRC_PLUGINS_DIR/asdf/completions $ZSHRC_PLUGINS_DIR/zsh-completions/src $ZSHRC_PLUGINS_DIR/conda-zsh-completion $fpath)
+zsh-defer -c compinit
 
 (( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv'jq-* -> jq' jqlang/jq
 (( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv'*/rg -> rg' BurntSushi/ripgrep
@@ -134,16 +145,6 @@ fi
 (( $+commands[fd] )) || zinit from'gh-r' as'program' for pick'fd-*-linux-*' extract mv'*/fd -> fd' pick'fd' @sharkdp/fd
 (( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract junegunn/fzf
 (( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' extract ajeetdsouza/zoxide
-
-zinit ice wait lucid
-zinit light $ZSHRC_PLUGINS_DIR/asdf
-
-ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-zinit wait lucid light-mode for \
-    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" atload'FAST_HIGHLIGHT[chroma-man]=' \
-        $ZSHRC_PLUGINS_DIR/fast-syntax-highlighting \
-    atload"_zsh_autosuggest_start" \
-        $ZSHRC_PLUGINS_DIR/zsh-autosuggestions
 
 # GPG TTY
 export GPG_TTY=$TTY
@@ -243,7 +244,7 @@ export ASDF_GOLANG_MOD_VERSION_ENABLED=false
 
 # Miniconda3
 if [[ -d ~/miniconda3 ]]; then
-    source ~/miniconda3/etc/profile.d/conda.sh
+    zsh-defer source ~/miniconda3/etc/profile.d/conda.sh
 fi
 
 ctf() {
