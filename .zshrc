@@ -78,9 +78,9 @@ fi
 # ZSHRC
 ZSHRC_DIR=$XDG_CONFIG_HOME/zshrc
 ZSHRC_SNIPPETS_DIR=$XDG_CONFIG_HOME/zshrc/snippets
-if [[ ! -d $ZSHRC_SNIPPETS_DIR ]]; then
-    mkdir -p $ZSHRC_SNIPPETS_DIR
-fi
+ZSHRC_PLUGINS_DIR=$XDG_CONFIG_HOME/zshrc/plugins
+[[ ! -d $ZSHRC_SNIPPETS_DIR ]] && mkdir -p $ZSHRC_SNIPPETS_DIR
+[[ ! -d $ZSHRC_PLUGINS_DIR ]] && mkdir -p $ZSHRC_PLUGINS_DIR
 
 # ZInit
 ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
@@ -105,7 +105,7 @@ zinit ice wait lucid
 zinit snippet $ZSHRC_SNIPPETS_DIR/fzf-key-bindings.zsh
 
 zinit ice cloneopts"--branch per-term-instant-prompt" depth=1
-zinit light maple3142/powerlevel10k
+zinit light $ZSHRC_PLUGINS_DIR/powerlevel10k
 
 zinit ice wait lucid blockf atload$'
     zstyle \':fzf-tab:complete:(cd|z|cat|bat|ls|eza|rg|fd|grep|vim|code):*\' fzf-preview \'if [[ -d $realpath ]]; then eza -1 --color=always $realpath; elif [[ -f $realpath ]]; then if $(file $realpath | grep -qe text); then head -c 1024 $realpath | bat -p -f --file-name $realpath; else file $realpath; fi; fi \'
@@ -113,7 +113,7 @@ zinit ice wait lucid blockf atload$'
     zstyle \':fzf-tab:complete:*:argument-1\' fzf-preview
     zstyle \':completion:*\' menu select
 '
-zinit light Aloxaf/fzf-tab
+zinit light $ZSHRC_PLUGINS_DIR/fzf-tab
 
 # use git completion from upstream, which support file completion with alternative worktree and git-dir (cfg)
 USE_UPSTREAM_GIT_COMPLETION=${USE_UPSTREAM_GIT_COMPLETION:-0}
@@ -136,17 +136,14 @@ fi
 (( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' extract ajeetdsouza/zoxide
 
 zinit ice wait lucid
-zinit light asdf-vm/asdf
+zinit light $ZSHRC_PLUGINS_DIR/asdf
 
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 zinit wait lucid light-mode for \
     atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" atload'FAST_HIGHLIGHT[chroma-man]=' \
-        zdharma-continuum/fast-syntax-highlighting \
+        $ZSHRC_PLUGINS_DIR/fast-syntax-highlighting \
     atload"_zsh_autosuggest_start" \
-        zsh-users/zsh-autosuggestions \
-    as'completion' blockf \
-        zsh-users/zsh-completions \
-        conda-incubator/conda-zsh-completion
+        $ZSHRC_PLUGINS_DIR/zsh-autosuggestions
 
 # GPG TTY
 export GPG_TTY=$TTY
