@@ -27,5 +27,6 @@ cfg remote add origin https://github.com/maple3142/dotfiles.git
 cfg fetch origin
 cfg checkout -f -b master --track origin/master
 cfg submodule update --init --recursive --depth 1
+zsh -ci 'zinit creinstall $ZSHRC_PLUGINS_DIR'
 log "Remember to use \`chsh -s $(command -v zsh)\` to change default shell"
 log "Done! Please manually launch \`zsh\` to enjoy!"
