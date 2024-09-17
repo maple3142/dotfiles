@@ -3,7 +3,8 @@ if [ -z "$ZSH_VERSION" ]; then
 	echo "Please run this script with zsh"
 	exit 1
 fi
-shopt -s expand_aliases
+# shopt -s expand_aliases
+setopt aliases
 WHITE='\033[1;37m'
 LGREEN='\033[1;32m'
 CYAN='\033[0;36m'
