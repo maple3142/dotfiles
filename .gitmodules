@@ -17,3 +17,6 @@
 [submodule ".local/share/zinit/plugins/zsh-users---zsh-autosuggestions"]
 	path = .local/share/zinit/plugins/zsh-users---zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule ".local/share/zinit/plugins/zsh-users---zsh-completions"]
+	path = .local/share/zinit/plugins/zsh-users---zsh-completions
+	url = https://github.com/zsh-users/zsh-completions.git
