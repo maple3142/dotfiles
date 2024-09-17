@@ -117,7 +117,7 @@ zinit light Aloxaf/fzf-tab
 
 # use git completion from upstream, which support file completion with alternative worktree and git-dir (cfg)
 USE_UPSTREAM_GIT_COMPLETION=${USE_UPSTREAM_GIT_COMPLETION:-0}
-if [[ USE_UPSTREAM_GIT_COMPLETION != 0 ]]; then
+if [[ $USE_UPSTREAM_GIT_COMPLETION != 0 ]]; then
     () {
         local gitver="v${$(git version)##*version }"
         zinit wait silent lucid atclone"zstyle ':completion:*:*:git:*' script git-completion.bash" atpull'%atclone' for \
