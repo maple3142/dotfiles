@@ -6,3 +6,6 @@
     url = https://github.com/maple3142/powerlevel10k.git
     branch = per-term-instant-prompt
 
+[submodule ".local/share/zinit/plugins/Aloxaf---fzf-tab"]
+	path = .local/share/zinit/plugins/Aloxaf---fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab.git
