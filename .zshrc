@@ -115,7 +115,7 @@ zinit light Aloxaf/fzf-tab
 (( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract eza-community/eza
 (( $+commands[bat] )) || zinit from'gh-r' as'program' for pick'bat-*-linux-*' extract mv'*/bat -> bat' @sharkdp/bat
 (( $+commands[fd] )) || zinit from'gh-r' as'program' for pick'fd-*-linux-*' extract mv'*/fd -> fd' pick'fd' @sharkdp/fd
-(( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract mv'*/fzf -> fzf' junegunn/fzf
+(( $+commands[fzf] )) || zinit from'gh-r' as'program' for pick'fzf-*-linux-*' extract junegunn/fzf
 (( $+commands[zoxide] )) || zinit from'gh-r' as'program' for pick'zoxide-*-linux-*' extract ajeetdsouza/zoxide
 
 zinit ice wait lucid
