@@ -12,3 +12,6 @@
 [submodule ".local/share/zinit/plugins/asdf-vm---asdf"]
 	path = .local/share/zinit/plugins/asdf-vm---asdf
 	url = https://github.com/asdf-vm/asdf.git
+[submodule ".local/share/zinit/plugins/zdharma-continuum---fast-syntax-highlighting"]
+	path = .local/share/zinit/plugins/zdharma-continuum---fast-syntax-highlighting
+	url = https://github.com/zdharma-continuum/fast-syntax-highlighting.git
