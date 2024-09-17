@@ -76,6 +76,44 @@ if [[ -v WSL_DISTRO_NAME ]]; then
     fi
 fi
 
+# Key bindings
+# based on https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
+
+# history up
+autoload -U up-line-or-beginning-search
+zle -N up-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search
+if [[ -n "${terminfo[kcuu1]}" ]]; then
+  bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
+fi
+# history down
+autoload -U down-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
+if [[ -n "${terminfo[kcud1]}" ]]; then
+  bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
+fi
+# Home & End key
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+# Delete key
+if [[ -n "${terminfo[kdch1]}" ]]; then
+  bindkey "${terminfo[kdch1]}" delete-char
+else
+  bindkey "^[[3~" delete-char
+  bindkey "^[3;5~" delete-char
+fi
+# Ctrl + Left/Right key
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
+# C-x C-e to edit command line in $EDITOR
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '\C-x\C-e' edit-command-line
+# Esc + m to copy previous shell word (for mv, cp, etc.)
+bindkey "^[m" copy-prev-shell-word
+
+
 # zshrc snippets, plugins, completions
 ZSHRC_DIR=$XDG_CONFIG_HOME/zshrc
 ZSHRC_SNIPPETS_DIR=$XDG_CONFIG_HOME/zshrc/snippets
@@ -85,13 +123,13 @@ ZSHRC_COMPLETIONS_DIR=$XDG_CONFIG_HOME/zshrc/completions
 [[ ! -d $ZSHRC_PLUGINS_DIR ]] && mkdir -p $ZSHRC_PLUGINS_DIR
 [[ ! -d $ZSHRC_COMPLETIONS_DIR ]] && mkdir -p $ZSHRC_COMPLETIONS_DIR
 
+VI_MODE_SET_CURSOR=true
 autoload compinit
 
 source $ZSHRC_SNIPPETS_DIR/omzl-history.zsh  # this sets some history options, so it can't be deferred
 source $ZSHRC_PLUGINS_DIR/powerlevel10k/powerlevel10k.zsh-theme  # theme, can't be deferred
 source $ZSHRC_PLUGINS_DIR/zsh-defer/zsh-defer.plugin.zsh  # defer itself can't be deferred
 
-zsh-defer source $ZSHRC_SNIPPETS_DIR/omzl-key-bindings.zsh
 zsh-defer source $ZSHRC_SNIPPETS_DIR/omzp-sudo.zsh
 zsh-defer source $ZSHRC_SNIPPETS_DIR/fzf-key-bindings.zsh
 
@@ -133,6 +171,16 @@ fpath+=$ZSHRC_COMPLETIONS_DIR/zsh-completions/src
 fpath+=$ZSHRC_COMPLETIONS_DIR/conda-zsh-completion
 zsh-defer -c compinit
 
+compile-all() {
+    autoload -U zrecompile
+    local f
+    for f in $ZSHRC_DIR/**/*.zsh{,-theme}(N); do
+        zrecompile -pq "$f"
+    done
+    zrecompile -pq "$HOME/.zshrc"
+    zrecompile -pq "$HOME/.p10k.zsh"
+}
+
 # GPG TTY
 export GPG_TTY=$TTY
 
@@ -165,6 +213,7 @@ set_title() {
     printf "\033]0;$USER_NICK@$HOST: ${(j:/:)parts}\007"
 }
 add-zsh-hook precmd set_title
+set_title
 
 # Zsh settings
 ZSH_DISABLE_COMPFIX=true
@@ -179,10 +228,6 @@ setopt autocd
 setopt histignorespace
 unsetopt beep
 unsetopt nomatch
-
-# Home & End key
-bindkey  "^[[H"   beginning-of-line
-bindkey  "^[[F"   end-of-line
 
 # Fix ssh autocomplete
 () {
