@@ -125,17 +125,22 @@ USE_UPSTREAM_GIT_COMPLETION=${USE_UPSTREAM_GIT_COMPLETION:-0}
 if [[ $USE_UPSTREAM_GIT_COMPLETION != 0 ]]; then
     () {
         local gitver="v${$(git version)##*version }"
-        if [[ ! -f $ZSHRC_COMPLETIONS_DIR/git$gitver ]]; then
-            curl -sS https://raw.githubusercontent.com/git/git/$gitver/contrib/completion/git-completion.bash > $ZSHRC_COMPLETIONS_DIR/git-completion.bash
-            curl -sS https://raw.githubusercontent.com/git/git/$gitver/contrib/completion/git-completion.zsh > $ZSHRC_COMPLETIONS_DIR/_git
-            zcompile $ZSHRC_COMPLETIONS_DIR/_git
-            touch $ZSHRC_COMPLETIONS_DIR/git$gitver
+        local completiondir=$ZSHRC_COMPLETIONS_DIR/git$gitver
+        if [[ ! -d $completiondir ]]; then
+            mkdir -p $completiondir
+            curl -sS https://raw.githubusercontent.com/git/git/$gitver/contrib/completion/git-completion.bash > $completiondir/git-completion.bash
+            curl -sS https://raw.githubusercontent.com/git/git/$gitver/contrib/completion/git-completion.zsh > $completiondir/_git
+            zcompile $completiondir/_git
         fi
-        zstyle ':completion:*:*:git:*' script $ZSHRC_COMPLETIONS_DIR/git-completion.bash
+        zstyle ':completion:*:*:git:*' script $completiondir/git-completion.bash
+        fpath=($completiondir $fpath)  # prepend so it can override the default one
     }
 fi
 
-fpath=($ZSHRC_COMPLETIONS_DIR $ZSHRC_PLUGINS_DIR/asdf/completions $ZSHRC_PLUGINS_DIR/zsh-completions/src $ZSHRC_PLUGINS_DIR/conda-zsh-completion $fpath)
+fpath+=$ZSHRC_COMPLETIONS_DIR
+fpath+=$ZSHRC_PLUGINS_DIR/asdf/completions
+fpath+=$ZSHRC_COMPLETIONS_DIR/zsh-completions/src
+fpath+=$ZSHRC_COMPLETIONS_DIR/conda-zsh-completion
 zsh-defer -c compinit
 
 (( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv'jq-* -> jq' jqlang/jq

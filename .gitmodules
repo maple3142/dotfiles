@@ -42,8 +42,8 @@
 	path = .config/zshrc/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
 [submodule ".config/zshrc/plugins/zsh-completions"]
-	path = .config/zshrc/plugins/zsh-completions
+	path = .config/zshrc/completions/zsh-completions
 	url = https://github.com/zsh-users/zsh-completions.git
 [submodule ".config/zshrc/plugins/conda-zsh-completion"]
-	path = .config/zshrc/plugins/conda-zsh-completion
+	path = .config/zshrc/completions/conda-zsh-completion
 	url = https://github.com/conda-incubator/conda-zsh-completion.git
