@@ -84,24 +84,24 @@ autoload -U up-line-or-beginning-search
 zle -N up-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search
 if [[ -n "${terminfo[kcuu1]}" ]]; then
-  bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
+    bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
 fi
 # history down
 autoload -U down-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey "^[[B" down-line-or-beginning-search
 if [[ -n "${terminfo[kcud1]}" ]]; then
-  bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
+    bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
 fi
 # Home & End key
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
 # Delete key
 if [[ -n "${terminfo[kdch1]}" ]]; then
-  bindkey "${terminfo[kdch1]}" delete-char
+    bindkey "${terminfo[kdch1]}" delete-char
 else
-  bindkey "^[[3~" delete-char
-  bindkey "^[3;5~" delete-char
+    bindkey "^[[3~" delete-char
+    bindkey "^[3;5~" delete-char
 fi
 # Ctrl + Left/Right key
 bindkey '^[[1;5C' forward-word
@@ -123,7 +123,6 @@ ZSHRC_COMPLETIONS_DIR=$XDG_CONFIG_HOME/zshrc/completions
 [[ ! -d $ZSHRC_PLUGINS_DIR ]] && mkdir -p $ZSHRC_PLUGINS_DIR
 [[ ! -d $ZSHRC_COMPLETIONS_DIR ]] && mkdir -p $ZSHRC_COMPLETIONS_DIR
 
-VI_MODE_SET_CURSOR=true
 autoload compinit
 
 source $ZSHRC_SNIPPETS_DIR/omzl-history.zsh  # this sets some history options, so it can't be deferred
@@ -147,9 +146,9 @@ zsh-defer -c 'FAST_HIGHLIGHT[chroma-man]='
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 zsh-defer source $ZSHRC_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
 
-zsh-defer source $ZSHRC_PLUGINS_DIR/asdf/asdf.sh
+source $ZSHRC_PLUGINS_DIR/asdf/asdf.sh  # defer this would affect things like node, python versions...
 
-USE_UPSTREAM_GIT_COMPLETION=${USE_UPSTREAM_GIT_COMPLETION:-0}
+USE_UPSTREAM_GIT_COMPLETION=${USE_UPSTREAM_GIT_COMPLETION:=0}
 if [[ $USE_UPSTREAM_GIT_COMPLETION != 0 ]]; then
     () {
         local gitver="v${$(git version)##*version }"
