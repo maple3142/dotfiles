@@ -78,7 +78,17 @@ fi
 
 # Key bindings
 # based on https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
-
+if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
+    function zle-line-init() {
+        echoti smkx
+    }
+    function zle-line-finish() {
+        echoti rmkx
+    }
+    zle -N zle-line-init
+    zle -N zle-line-finish
+fi
+bindkey -e  # emacs key bindings
 # history up
 autoload -U up-line-or-beginning-search
 zle -N up-line-or-beginning-search
@@ -94,8 +104,10 @@ if [[ -n "${terminfo[kcud1]}" ]]; then
     bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
 fi
 # Home & End key
-bindkey "^[[H" beginning-of-line
-bindkey "^[[F" end-of-line
+# note: this appear to be a bit complicated as Home and End can send different sequences in different terminals and modes
+# https://github.com/romkatv/zsh4humans/issues/7
+bindkey "${terminfo[khome]}" beginning-of-line
+bindkey "${terminfo[kend]}" end-of-line
 # Delete key
 if [[ -n "${terminfo[kdch1]}" ]]; then
     bindkey "${terminfo[kdch1]}" delete-char
