@@ -21,6 +21,7 @@ require(){
 require git || exit $?
 cd ~ || { echo "Unable to cd ~"; exit 1; }
 rm -rf "$HOME/.cfg"
+rm -rf "$HOME/.config/zshrc"
 # ZInit, still used for downloading programs
 ZINIT_DIR=${XDG_DATA_HOME:-${HOME}/.local/share}/zinit
 ZINIT_HOME=$ZINIT_DIR/zinit.git
@@ -33,6 +34,7 @@ zinit() {
 log "Try getting required binaries"
 LOCAL_BIN=$HOME/.local/bin
 [[ -d $LOCAL_BIN ]] || mkdir -p $LOCAL_BIN
+PATH="$LOCAL_BIN:$PATH"
 (( $+commands[jq] )) || zinit from'gh-r' as'program' for pick'jq-*' mv"jq-* -> $LOCAL_BIN/jq" jqlang/jq
 (( $+commands[rg] )) || zinit from'gh-r' as'program' for pick'ripgrep-*-linux-*' extract mv"*/rg -> $LOCAL_BIN/rg" BurntSushi/ripgrep
 (( $+commands[eza] )) || zinit from'gh-r' as'program' for pick'eza-linux-*' extract mv"eza -> $LOCAL_BIN/eza" eza-community/eza
