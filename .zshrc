@@ -135,10 +135,9 @@ ZSHRC_COMPLETIONS_DIR=$XDG_CONFIG_HOME/zshrc/completions
 [[ ! -d $ZSHRC_PLUGINS_DIR ]] && mkdir -p $ZSHRC_PLUGINS_DIR
 [[ ! -d $ZSHRC_COMPLETIONS_DIR ]] && mkdir -p $ZSHRC_COMPLETIONS_DIR
 
-autoload -Uz compinit
-
 source $ZSHRC_SNIPPETS_DIR/omzl-history.zsh  # this sets some history options, so it can't be deferred
 source $ZSHRC_PLUGINS_DIR/powerlevel10k/powerlevel10k.zsh-theme  # theme, can't be deferred
+source ~/.p10k.zsh  # theme config
 source $ZSHRC_PLUGINS_DIR/zsh-defer/zsh-defer.plugin.zsh  # defer itself can't be deferred
 
 zsh-defer source $ZSHRC_SNIPPETS_DIR/omzp-sudo.zsh
@@ -180,7 +179,8 @@ fpath+=$ZSHRC_COMPLETIONS_DIR
 fpath+=$ZSHRC_PLUGINS_DIR/asdf/completions
 fpath+=$ZSHRC_COMPLETIONS_DIR/zsh-completions/src
 fpath+=$ZSHRC_COMPLETIONS_DIR/conda-zsh-completion
-zsh-defer -c compinit
+autoload -Uz compinit
+zsh-defer compinit
 
 compile-all() {
     autoload -Uz zrecompile
@@ -241,7 +241,7 @@ unsetopt beep
 unsetopt nomatch
 
 # Fix ssh autocomplete
-() {
+_fix_ssh_complete() {
     zstyle ':completion:*:ssh:argument-1:*' tag-order hosts
     local h=()
     if [[ -r ~/.ssh/config ]]; then
@@ -251,6 +251,7 @@ unsetopt nomatch
         zstyle ':completion:*:(ssh|scp|sftp|rsh|rsync):*' hosts $h
     fi
 }
+zsh-defer _fix_ssh_complete
 
 # Lang
 export LANG=en_US.UTF-8
@@ -362,7 +363,7 @@ if (( $+commands[zoxide] )) then
         zcompile $ZOXIDE_DIR/init.zsh
     fi
     alias zi >/dev/null && unalias zi
-    source $ZOXIDE_DIR/init.zsh
+    zsh-defer source $ZOXIDE_DIR/init.zsh
     alias cd=z
 fi
 
@@ -485,5 +486,3 @@ EOF
     fi
 }
 
-# P10k Initialize
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
