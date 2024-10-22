@@ -43,7 +43,7 @@ if [[ -v WSL_DISTRO_NAME ]]; then
     else
         # assumed to be nat mode, the host is the router
         () {
-            arr=($(ip route show default))
+            local arr=($(ip route show default))
             export HOSTIP=$arr[3]
         }
     fi
@@ -97,7 +97,7 @@ if [[ -n "${terminfo[kcuu1]}" ]]; then
     bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
 fi
 # history down
-autoload -U down-line-or-beginning-search
+autoload -Uz down-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey "^[[B" down-line-or-beginning-search
 if [[ -n "${terminfo[kcud1]}" ]]; then
@@ -119,7 +119,7 @@ fi
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 # C-x C-e to edit command line in $EDITOR
-autoload -U edit-command-line
+autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
 # Esc + m to copy previous shell word (for mv, cp, etc.)
@@ -135,7 +135,7 @@ ZSHRC_COMPLETIONS_DIR=$XDG_CONFIG_HOME/zshrc/completions
 [[ ! -d $ZSHRC_PLUGINS_DIR ]] && mkdir -p $ZSHRC_PLUGINS_DIR
 [[ ! -d $ZSHRC_COMPLETIONS_DIR ]] && mkdir -p $ZSHRC_COMPLETIONS_DIR
 
-autoload compinit
+autoload -Uz compinit
 
 source $ZSHRC_SNIPPETS_DIR/omzl-history.zsh  # this sets some history options, so it can't be deferred
 source $ZSHRC_PLUGINS_DIR/powerlevel10k/powerlevel10k.zsh-theme  # theme, can't be deferred
@@ -183,7 +183,7 @@ fpath+=$ZSHRC_COMPLETIONS_DIR/conda-zsh-completion
 zsh-defer -c compinit
 
 compile-all() {
-    autoload -U zrecompile
+    autoload -Uz zrecompile
     local f
     for f in $ZSHRC_DIR/**/*.zsh{,-theme}(N); do
         zrecompile -pq "$f"
