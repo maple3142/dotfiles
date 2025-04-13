@@ -410,17 +410,18 @@ if (( $+commands[python3] && $+commands[tmux] && $+commands[cloudflared] && $+co
     }
 fi
 
-# Better `nc -lv` using ssh port forwarding
-ncl() {
-    if [[ ! $# -eq 2 ]]; then
-        echo "Syntax: $0 [host] [port]"
+# Remote port listening
+rlisten() {
+    if [[ ! $# -ge 2 || ! $# -le 3 ]]; then
+        echo "Syntax: $0 [host] [port] [cmd (default nc -lv \$port)]"
         return 1
     fi
     # need to enable GatewayPorts in remote sshd_config
     local host=$1
     local port=$2
+    local cmd=${3:-nc -lv $port}
     ssh -R $port:0.0.0.0:$port $host -N &
-    nc -lv $port
+    eval $cmd
     kill -9 $!
 }
 
