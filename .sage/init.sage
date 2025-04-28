@@ -1,2 +1,2 @@
-%colors Linux
+%colors linux
 
