@@ -61,9 +61,7 @@ fi
 if [[ "$arg" == file:///* ]]; then
     arg="${arg#file://}"
 fi
-if [[ "$arg" == /* ]]; then
-    arg="$(wslpath -w "$arg")"
-fi
+arg="$(wslpath -w "$arg")"
 /mnt/c/Windows/explorer.exe "$arg"
 exit 0
 EOF
