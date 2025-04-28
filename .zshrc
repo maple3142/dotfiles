@@ -47,10 +47,30 @@ if [[ -v WSL_DISTRO_NAME ]]; then
             export HOSTIP=$arr[3]
         }
     fi
-    ex() {
-        local arg=${1:-.}
-        /mnt/c/Windows/explorer.exe $(wslpath -w $arg)
-    }
+    if [[ ! -x $LOCAL_BIN/explorer ]]; then
+        # a script to open anything on windows
+        # similar to wsl-open, but supports file://
+        # see https://github.com/4U6U57/wsl-open/pull/13
+        cat > $LOCAL_BIN/explorer <<'EOF'
+#!/usr/bin/env bash
+arg=${1:-.}
+if [[ "$arg" == http://* ]] || [[ "$arg" == https://* ]]; then
+    wsl-open "$arg"
+    exit 0
+fi
+if [[ "$arg" == file:///* ]]; then
+    arg="${arg#file://}"
+fi
+if [[ "$arg" == /* ]]; then
+    arg="$(wslpath -w "$arg")"
+fi
+/mnt/c/Windows/explorer.exe "$arg"
+exit 0
+EOF
+        chmod +x $LOCAL_BIN/explorer
+    fi
+    export BROWSER=$LOCAL_BIN/explorer
+    alias ex=explorer
     win() {
         path=($winpath $path) $@
     }
