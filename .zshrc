@@ -220,9 +220,9 @@ if (( $+commands[ssh-add] )) && (( !${+SSH_AUTH_SOCK} )); then
     ssh-add -l 2>/dev/null >/dev/null
     if [[ $? -ge 2 ]]; then
         if [[ -a $SSH_AUTH_SOCK ]]; then
-            rm $SSH_AUTH_SOCK
+            rm -f $SSH_AUTH_SOCK
         fi
-        ssh-agent -a $SSH_AUTH_SOCK >/dev/null
+        ssh-agent -a $SSH_AUTH_SOCK >/dev/null 2>&1
     fi
     # need to have `AddKeysToAgent yes` in ~/.ssh/config
     add_key_if_not_exist() {
