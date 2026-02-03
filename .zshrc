@@ -14,7 +14,7 @@ export XDG_STATE_HOME=$HOME/.local/state
 export RLWRAP_HOME=$XDG_DATA_HOME/rlwrap
 
 # Path
-if [[ $UID != 0 ]]; then
+if [[ $UID != 0 ]] && [[ "$OSTYPE" != "darwin"* ]]; then
     path=(${path:#*/sbin*})
 fi
 prepend_path() {
