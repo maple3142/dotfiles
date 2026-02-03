@@ -232,6 +232,10 @@ fi
 
 # Set title
 USER_NICK=${${(%):-%n}:/maple3142/🍁}
+HOST_PREFIX="$USER_NICK@$HOST: "
+if [[ -o login ]]; then
+    HOST_PREFIX=
+fi
 set_title() {
     local cwd=${PWD/#$HOME/'~'}
     # ~/.hidden/folder/apple/orange -> ~/.h/f/a/orange
@@ -239,7 +243,7 @@ set_title() {
     for (( i = 1; i < ${#parts}; i++ )); do
         [[ ${parts[i]} =~ '(\.?.)' ]] && parts[i]=${match[1]}
     done
-    printf "\033]0;$USER_NICK@$HOST: ${(j:/:)parts}\007"
+    printf "\033]0;$HOST_PREFIX${(j:/:)parts}\007"
 }
 add-zsh-hook precmd set_title
 set_title
