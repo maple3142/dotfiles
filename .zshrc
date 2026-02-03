@@ -233,7 +233,8 @@ fi
 # Set title
 USER_NICK=${${(%):-%n}:/maple3142/🍁}
 HOST_PREFIX="$USER_NICK@$HOST: "
-if [[ -o login ]]; then
+if [[ -o login ]] && [[ -z $SSH_CLIENT ]]; then
+    # Hide host in local login shells
     HOST_PREFIX=
 fi
 set_title() {
