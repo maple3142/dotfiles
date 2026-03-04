@@ -510,3 +510,20 @@ EOF
     fi
 }
 
+sshp() {
+    if [[ ! $# -ge 2 ]]; then
+        echo "Syntax: $0 [password] [ssh command]"
+        return 1
+    fi
+    local pwd=$1
+    local askpass_helper=$HOME/.cache/ssh-askpass-helper
+    if [[ ! -x $askpass_helper ]]; then
+        cat > $askpass_helper <<EOF
+#!/bin/sh
+echo \$SSH_ASKPASS_PASSWORD
+EOF
+        chmod +x $askpass_helper
+    fi
+    shift
+    SSH_ASKPASS_PASSWORD=$pwd SSH_ASKPASS=$askpass_helper SSH_ASKPASS_REQUIRE=force  "$@"
+}
