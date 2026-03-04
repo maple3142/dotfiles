@@ -513,7 +513,7 @@ EOF
 sshp() {
     if [[ ! $# -ge 2 ]]; then
         echo "Syntax: $0 [password] [ssh command]"
-        echo "Example: $0 mypassword ssh mypassword ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no user@host"
+        echo "Example: $0 mypassword ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no user@host"
         return 1
     fi
     local pwd=$1
