@@ -513,6 +513,7 @@ EOF
 sshp() {
     if [[ ! $# -ge 2 ]]; then
         echo "Syntax: $0 [password] [ssh command]"
+        echo "Example: $0 mypassword ssh mypassword ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no user@host"
         return 1
     fi
     local pwd=$1
@@ -525,5 +526,5 @@ EOF
         chmod +x $askpass_helper
     fi
     shift
-    SSH_ASKPASS_PASSWORD=$pwd SSH_ASKPASS=$askpass_helper SSH_ASKPASS_REQUIRE=force  "$@"
+    SSH_ASKPASS_PASSWORD=$pwd SSH_ASKPASS=$askpass_helper SSH_ASKPASS_REQUIRE=force "$@"
 }
