@@ -237,17 +237,38 @@ if [[ -o login ]] && [[ -z $SSH_CLIENT ]]; then
     # Hide host in local login shells
     HOST_PREFIX=
 fi
-set_title() {
+_set_title() {
+    printf "\033]0;%s\007" $1
+}
+title() {
+    # title [title] to set title
+    # title to reset to default
+    if [[ $# -gt 0 ]]; then
+        _TERM_TITLE=$1
+        _prompt_title_hook
+    else
+        unset _TERM_TITLE
+        _prompt_title_hook
+    fi
+}
+_prompt_title_hook() {
+    # use _TERM_TITLE if set
+    if [[ -v _TERM_TITLE ]]; then
+        _set_title "$HOST_PREFIX$_TERM_TITLE"
+        return
+    fi
+    # otherwise, use shortened cwd
     local cwd=${PWD/#$HOME/'~'}
     # ~/.hidden/folder/apple/orange -> ~/.h/f/a/orange
     local parts=("${(@s|/|)cwd}")  # split by /, and keep empty parts
     for (( i = 1; i < ${#parts}; i++ )); do
         [[ ${parts[i]} =~ '(\.?.)' ]] && parts[i]=${match[1]}
     done
-    printf "\033]0;$HOST_PREFIX${(j:/:)parts}\007"
+    # printf "\033]0;$HOST_PREFIX${(j:/:)parts}\007"
+    _set_title "$HOST_PREFIX${(j:/:)parts}"
 }
-add-zsh-hook precmd set_title
-set_title
+add-zsh-hook precmd _prompt_title_hook
+_prompt_title_hook
 
 # Zsh settings
 ZSH_DISABLE_COMPFIX=true
