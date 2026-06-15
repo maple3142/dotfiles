@@ -331,14 +331,16 @@ fi
 export ASDF_GOLANG_MOD_VERSION_ENABLED=false
 
 # Miniconda3
-if [[ -d ~/miniconda3 ]]; then
-    zsh-defer source ~/miniconda3/etc/profile.d/conda.sh
+# e.g. MacOS HomeBrew: export MINICONDA_BASE="/opt/homebrew/Caskroom/miniconda/base" in ~/.zprofile
+export MINICONDA_BASE=${MINICONDA_BASE:-$HOME/miniconda3}
+if [[ -d $MINICONDA_BASE ]]; then
+    zsh-defer source $MINICONDA_BASE/etc/profile.d/conda.sh
 fi
 
 ctf() {
     # A fast but incomplete alternative to `conda activate ctf`
     local _ENV=ctf
-    local _PREFIX=$HOME/miniconda3/envs/$_ENV
+    local _PREFIX=$MINICONDA_BASE/envs/$_ENV
     local _BINDIR=$_PREFIX/bin
     if [[ -v SIMPLE_CONDA ]]; then
         path=(${path:#$_BINDIR})
@@ -349,7 +351,7 @@ ctf() {
         functions[conda]=$functions[orig_conda]
         unset -f orig_conda
     else
-        if [[ -v CONDA_PREFIX ]]; then
+        if [[ -n $CONDA_PREFIX ]]; then
             echo 'Please deactivate official conda first'
         else
             path=($_BINDIR $path)
